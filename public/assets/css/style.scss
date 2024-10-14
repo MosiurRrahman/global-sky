@@ -1394,6 +1394,9 @@ header.header1 {
                                         padding-bottom: 15px;
 
                                         .cart-area {
+                                          .font-b{
+                                            font-weight: 600;
+                                          }
                                             .add-cart-btn {
                                                 color: var(--white-color);
                                                 text-align: center;
@@ -1419,6 +1422,9 @@ header.header1 {
                                                 }
 
                                                 &:hover {
+                                                  p{
+                                                    font-weight: 600;
+                                                  }
                                                     color: var(--title-color);
                                                     background: var(--white-color);
                                                 }
@@ -2617,64 +2623,69 @@ header.about-us {
       }
     }
   }
-// .home1-banner-area {
-//     position: relative;
+.home1-banner-area {
+    position: relative;
 
-//     .home1-banner-wrapper {
-//         background-size: cover;
-//         background-repeat: no-repeat;
-//         background-position: center center;
-//         position: relative;
-//         min-height: 80vh;
-//         @include xxl-down-device(){
-//             min-height: 100vh;
-//         }
+    .home1-banner-wrapper {
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        position: relative;
+        min-height: 80vh;
+        @include xxl-down-device(){
+            min-height: 100vh;
+        }
 
-//         .home1-banner-content {
-//             text-align: center;
-//             padding-top: 350px;
-//             width: 100%;
-//             position: relative;
-//             min-height: 500px;
-//             @include xxl-down-device(){
-//                 padding: 270px 0 150px;
-//             }
+        .home1-banner-content {
+            text-align: center;
+            padding-top: 350px;
+            width: 100%;
+            position: relative;
+            min-height: 500px;
+            @include xxl-down-device(){
+                padding: 270px 0 150px;
+            }
 
-//             h1 {
-//                 font-family: var(--font-dm-sans);
-//                 font-size: 70px;
-//                 font-weight: 700;
-//                 line-height: 1.2;
-//                 text-align: center;
-//                 color: var(--white-color);
-//                 margin-bottom: 0;
-//                 letter-spacing: 0.02em;
-//                 text-transform: capitalize;
+            h1 {
+                font-family: var(--font-dm-sans);
+                font-size: 70px;
+                font-weight: 700;
+                line-height: 1.2;
+                text-align: center;
+                color: var(--white-color);
+                margin-bottom: 0;
+                letter-spacing: 0.02em;
+                text-transform: capitalize;
 
 
-//                 span {
-//                     font-family: var(--font-satisfy);
-//                     font-size: 70px;
-//                     font-weight: 400;
-//                     line-height: 1;
-//                     letter-spacing: 0.02em;
-//                     text-align: center;
+                span {
+                    font-family: var(--font-satisfy);
+                    font-size: 70px;
+                    font-weight: 400;
+                    line-height: 1;
+                    letter-spacing: 0.02em;
+                    text-align: center;
 
-//                 }
-//                 @include md-down-device(){
-//                     font-size: 55px;
-//                     span{
-//                         font-size: 55px;
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
+                }
+                @include md-down-device(){
+                    font-size: 55px;
+                    span{
+                        font-size: 55px;
+                    }
+                }
+            }
+        }
+    }
+    .swiper-pagination{
+      top: 60% !important;
+      right: 40px !important;
+      flex-direction: column !important;
+    }
+}
 .package-search-filter-wrapper{
     position: relative;
     z-index: 2;
-    margin-top: -220px;
+    margin-top: -100px;
     .filter-and-form-area{
         background-color: var(--white-color);
         border: 1px solid rgba(99, 171, 69, 0.10);
@@ -3458,12 +3469,14 @@ header.about-us {
                             margin-bottom: 8px;
 
                         }
-
+                        .font-b{
+                          font-weight: 600;
+                        }
                         p {
                             font-family: var(--font-inter);
                             font-size: 15px;
-                            font-weight: 500;
-                            line-height: 2;
+                            font-weight: 400;
+                            line-height: 1.6;
                             letter-spacing: 0.02em;
                             text-align: left;
                             color: rgba(12, 12, 13, 0.5);
@@ -3518,8 +3531,12 @@ header.about-us {
         }
 
         &:hover {
+          .font-b{
+            font-weight: 600;
+          }
             .country-flip-box-front {
                 transform: translateX(-100%) translateY(0);
+               
             }
 
             .country-flip-box-back {
@@ -3678,7 +3695,7 @@ header.about-us {
   8.accordion section
 ========================================*/
 .accordion-with-tab-section {
-    background: #F1FCFE;
+
 
     .accordion-image {
         img {
@@ -4519,7 +4536,6 @@ header.about-us {
             text-align: left;
             color: var(--white-color);
             margin-bottom: 0;
-            max-width: 500px;
 
             @include lg-down-device() {
                 font-size: 60px;
@@ -6187,6 +6203,7 @@ header.about-us {
           border-color: var(--primary-color);
           background-color: var(--primary-color);
           color: var(--white-color);
+          width: 100%; // when tab add this width remove
         }
       }
     }

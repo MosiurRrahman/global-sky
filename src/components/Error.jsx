@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 
-const Error = ({massage}) => {
+const Error = ({status}) => {
     return (
         <div className="error-section">
             <div className="container">
@@ -12,7 +12,7 @@ const Error = ({massage}) => {
                                 <img src="/assets/image/404.png" alt="" />
                             </div>
                             <div className="error-conten">
-                                <h1>opps! {massage}</h1>
+                                <h1>opps! {status}</h1>
                                 <p>There is a technical issue on our end.</p>
                                 <div className="back-btn">
                                     <Link className="primary-btn1 error-btn" href="/">

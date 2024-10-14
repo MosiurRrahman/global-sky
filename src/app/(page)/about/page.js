@@ -6,26 +6,29 @@ import React from 'react'
 
 export default async function AboutPage() {
   const aboutData = await getAbout()
-  console.log(aboutData);
+
 
   return (
     <>
       {
         aboutData.status ? (<>
-          <div className="about-breadcrum-section mb-120">
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-lg-12">
-                  <div className="banner-content">
-                    <h1>{aboutData.data.title}</h1>
-                  </div>
-                </div>
+           <div className="about-breadcrum-section mb-120">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className={`banner-content ${aboutData.data.image === undefined?"not-image":""}`} style={{
+                backgroundImage: `linear-gradient(270deg, rgba(0, 0, 0, 50%), rgba(0, 0, 0, 0.3) 50%), url(${aboutData.data.image === null||aboutData.data.image === undefined?  '': base_url+aboutData.image })`
+              }} >
+                <span>{aboutData.data.title}</span>
+                <h1>About Us</h1>
               </div>
             </div>
           </div>
+        </div>
+      </div>
           {
             aboutData.data.get_sections.map((section) => {
-              console.log("about data", aboutData.office_address);
+              
 
               return <div key={section.id}>
                 {

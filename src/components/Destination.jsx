@@ -8,7 +8,7 @@ import SwiperCore, {
     Pagination,
 } from "swiper";
 import Link from "next/link";
-import { getofferSliderData } from "@/utils/getApi";
+// import { getofferSliderData } from "@/utils/getApi";
 import { base_url } from "@/utils/const";
 SwiperCore.use([Autoplay, EffectFade, Navigation, Pagination]);
 
@@ -85,7 +85,7 @@ const Destination = ({ data }) => {
                                                             <span>{item.title}</span>
                                                             <h2>{item?.sub_title}</h2>
                                                             <h6>{item?.description}</h6>
-                                                            <Link href={item.custom_url} className="primary-btn1 style-2">View Details</Link>
+                                                            {/* <Link href={item.custom_url} className="primary-btn1 style-2">View Details</Link> */}
                                                         </div>
                                                     </div>
                                                 </SwiperSlide>

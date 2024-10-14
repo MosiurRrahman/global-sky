@@ -11,8 +11,8 @@ export default async function Attractionpage() {
 
     return (
         <>
-            <Breadcrumb />
-            <div className="attraction-section mb-120">
+            {/* <Breadcrumb /> */}
+            <div className="attraction-section mt-120 mb-120">
                 <div className="container">
                     <div className="row g-4">
                         {

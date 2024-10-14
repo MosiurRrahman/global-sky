@@ -17,8 +17,15 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
 export default function RootLayout({ children }) {
+  useEffect(() => {
+    // Add the class to the body element when the component is mounted
+    document.body.classList.add('backgraound-color');
 
-  useMagneticHover();
+    // Cleanup function to remove the class when the component is unmounted
+    return () => {
+      document.body.classList.remove('backgraound-color');
+    };
+  }, []);
 
   useEffect(() => {
     require("bootstrap/dist/js/bootstrap.bundle.min.js");

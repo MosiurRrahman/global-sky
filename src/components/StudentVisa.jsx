@@ -12,7 +12,7 @@ import { base_url } from "@/utils/const";
 SwiperCore.use([Autoplay, EffectFade, Navigation, Pagination]);
 
 const StudentVisa = ({ data }) => {
-  console.log(data);
+
 
   const settings = useMemo(() => {
     return {

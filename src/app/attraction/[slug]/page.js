@@ -12,6 +12,7 @@ const AttractionDetailsPage = ({ params }) => {
   const [attraction, setAttraction] = useState(null);
   const [loading, setLoading] = useState(true);
 
+
   useEffect(() => {
     if (slug) {
       // Fetch the attraction details based on the slug
@@ -43,7 +44,20 @@ const AttractionDetailsPage = ({ params }) => {
 
   return (
     <>
-      <Breadcrumb />
+      <div className="about-breadcrum-section mb-120">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="banner-content" style={{
+                backgroundImage: `linear-gradient(270deg, rgba(0, 0, 0, 50%), rgba(0, 0, 0, 0.3) 50%), url(${attraction.banner === null?  '/assets/image/default-breadcrumb.png': base_url+attraction.banner })`
+              }} >
+                <span>{attraction.get_country.notes}</span>
+                <h1>Get Your {attraction.get_country.name} Visa</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="package-details-area mb-120">
         <div className="container">
           <div className="row">
@@ -58,6 +72,7 @@ const AttractionDetailsPage = ({ params }) => {
                   </div>
                   <div className="col-lg-6 h-100">
                     <div className="row g-3 h-100">
+
                       <div className="col-6">
                         <div className="gallery-img-wrap">
                           <img src="/assets/image/attraction-02.png" alt="attraction-02.png" />
@@ -107,98 +122,86 @@ const AttractionDetailsPage = ({ params }) => {
                     <path fillRule="evenodd" clipRule="evenodd" d="M14 0.43748C14 0.372778 13.9856 0.308889 13.9579 0.250418C13.9302 0.191947 13.8898 0.140348 13.8398 0.0993396C13.7897 0.0583312 13.7312 0.0289339 13.6684 0.0132656C13.6057 -0.00240264 13.5402 -0.00395173 13.4768 0.00872996L9.1875 0.86623L4.89825 0.00872996C4.84164 -0.00258444 4.78336 -0.00258444 4.72675 0.00872996L0.35175 0.88373C0.252608 0.903546 0.163389 0.957088 0.099263 1.03525C0.0351366 1.11342 6.10593e-05 1.21138 0 1.31248L0 13.5625C3.90711e-05 13.6272 0.0144289 13.6911 0.0421328 13.7495C0.0698367 13.808 0.110165 13.8596 0.160212 13.9006C0.210259 13.9416 0.268779 13.971 0.331556 13.9867C0.394332 14.0024 0.459803 14.0039 0.52325 13.9912L4.8125 13.1337L9.10175 13.9912C9.15836 14.0025 9.21664 14.0025 9.27325 13.9912L13.6482 13.1162C13.7474 13.0964 13.8366 13.0429 13.9007 12.9647C13.9649 12.8865 13.9999 12.7886 14 12.6875V0.43748ZM4.375 12.3287V0.97123L4.8125 0.88373L5.25 0.97123V12.3287L4.89825 12.2587C4.84165 12.2474 4.78335 12.2474 4.72675 12.2587L4.375 12.3287ZM8.75 13.0287V1.67123L9.10175 1.74123C9.15836 1.75254 9.21664 1.75254 9.27325 1.74123L9.625 1.67123V13.0287L9.1875 13.1162L8.75 13.0287Z">
                     </path>
                   </svg>
-                  Italy &amp; France.
+                  {attraction.get_country.name}
                 </li>
               </ul>
               <p>Across from Burj Khalifa in Downtown Dubai, you'll find the futuristic-looking Sky Views podium. It connects the top of The Address Sky View, a pair of 50-story elliptical dual towers (237.45 and 260.85 meters in height, respectively), which rise from a curved plinth.</p>
               <h4>Included and Excluded</h4>
               <div className="includ-and-exclud-area mb-20">
                 <ul>
-                  <li><i className="bi bi-check-lg" /> Ski touring involves exploring remote, off-piste terrains away from ski resorts.</li>
-                  <li><i className="bi bi-check-lg" /> A full-body workout combining skiing, hiking, and endurance.</li>
-                  <li><i className="bi bi-check-lg" /> Engaging in challenging ascents and thrilling descents on various terrains.</li>
-                  <li><i className="bi bi-check-lg" /> Enjoying pristine landscapes and serene natural environments.</li>
-                  <li><i className="bi bi-check-lg" /> Carrying safety gear (avalanche transceivers, shovels, probes) and knowledge of rescue procedures.</li>
+
+                  {attraction.included
+                    .split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|\!)(?=\s|$)/g) // Split by sentence-ending punctuation
+                    .filter(sentence => sentence.trim() !== '') // Filter out empty strings
+                    .map((sentence, index) => (
+                      <li key={index}>
+                        <i className="bi bi-check-lg" />
+                        {sentence.trim()}
+                      </li>
+                    ))}
                 </ul>
                 <ul className="exclud">
-                  <li><i className="bi bi-x-lg" /> Ski touring typically avoids the amenities and maintained slopes found in ski resorts.</li>
-                  <li><i className="bi bi-x-lg" /> It steers clear of crowded slopes and lift systems.</li>
-                  <li><i className="bi bi-x-lg" /> Ski touring often involves more challenging and varied terrains, less suitable for beginners.</li>
-                  <li><i className="bi bi-x-lg" /> In case of emergencies, immediate assistance may not be readily available compared to ski resorts.</li>
-                  <li><i className="bi bi-x-lg" />  Unlike ski resorts, conditions in backcountry areas can vary significantly and may not be groomed or controlled.</li>
+                  {attraction.excluded
+                    .split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|\!)(?=\s|$)/g) // Split by sentence-ending punctuation
+                    .filter(sentence => sentence.trim() !== '') // Filter out empty strings
+                    .map((sentence, index) => (
+                      <li key={index}>
+                        <i className="bi bi-x-lg" />
+                        {sentence.trim()}
+                      </li>
+                    ))}
+
                 </ul>
               </div>
               <div className="highlight-tour mb-20">
                 <h4>Highlights of the Place</h4>
                 <ul>
-                  <li><span><i className="bi bi-check" /></span> Immersion in breathtaking, untouched landscapes away from crowded ski resorts.</li>
-                  <li><span><i className="bi bi-check" /></span> Combining endurance and skill while exploring diverse terrains.</li>
-                  <li><span><i className="bi bi-check" /></span> Accessing pristine, less-traveled areas for a unique adventure.</li>
-                  <li><span><i className="bi bi-check" /></span> Strengthening camaraderie among fellow skiers in a shared outdoor experience.</li>
-                  <li><span><i className="bi bi-check" /></span> Accomplishing challenging ascents and thrilling descents in natural settings.</li>
-                  <li><span><i className="bi bi-check" /></span> Feeling the elements and connecting with the mountains in a profound way.</li>
-                  <li><span><i className="bi bi-check" /></span> Experiencing the freedom of traveling through snowy wilderness on skis.</li>
+                  {attraction.place_highlight
+                    .split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|\!)(?=\s|$)/g) // Split by sentence-ending punctuation
+                    .filter(sentence => sentence.trim() !== '') // Filter out empty strings
+                    .map((sentence, index) => (
+                      <li key={index}><span><i className="bi bi-check" /></span> {sentence.trim()}</li>
+                    ))}
                 </ul>
               </div>
               <div className="accordion tour-plan" id="tourPlan">
-                <div className="accordion-item">
-                  <h2 className="accordion-header" id="headingOne">
-                    <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Know before you go
-                    </button>
-                  </h2>
-                  <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#tourPlan">
-                    <div className="accordion-body">
-                      <ul>
-                        <li><i className="bi bi-check-lg" /> Passport or Emirates ID is mandatory to be carried.</li>
-                        <li><i className="bi bi-check-lg" /> <strong>Weight criteria :</strong> Guests weighing from 30 to 150 kgs will be allowed for the glass slide</li>
-                        <li><i className="bi bi-check-lg" /> <strong>Height criteria :</strong> Guests with height ranging from 120 cm to 200 cm will be allowed for the glass slide</li>
-                        <li><i className="bi bi-check-lg" /> <strong>Weight criteria :</strong> Guests weighing from 30 – 120 kg will be allowed for the Edge Walk</li>
-                        <li><i className="bi bi-check-lg" /> <strong>Height criteria :</strong> Guests with height ranging from 135 cm – 200 cm. will be allowed for the Edge Walk </li>
-                        <li><i className="bi bi-check-lg" /> You are required to wear modest and comfortable clothing (no loose dresses, skirts, flip flops, loose footwear, or long and loose scarves).</li>
-                        <li><i className="bi bi-check-lg" /> Please notify the Sky Views staff of any pre-existing health conditions, including any physical limitations or medical conditions including but not limited to; neck weakness, back weakness, broken bones, heart conditions, nervous disorders, motion sickness, epilepsy, or if pregnant.</li>
-                        <li><i className="bi bi-check-lg" /> Subject to Availability</li>
-                      </ul>
+                {attraction.get_faqs.map((faq, index) => {
+                  const collapseId = `collapse${index}`;
+                  const headingId = `heading${index}`;
+                  return (
+                    <div className="accordion-item" key={faq.id}>
+                      <h2 className="accordion-header" id={headingId}>
+                        <button
+                          className={`accordion-button ${index === 0 ? '' : 'collapsed'}`}
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target={`#${collapseId}`}
+                          aria-expanded={index === 0 ? 'true' : 'false'}
+                          aria-controls={collapseId}
+                        >
+                          {faq.question}
+                        </button>
+                      </h2>
+                      <div
+                        id={collapseId}
+                        className={`accordion-collapse collapse ${index === 0 ? 'show' : ''}`}
+                        aria-labelledby={headingId}
+                        data-bs-parent="#tourPlan"
+                      >
+                        <div className="accordion-body">
+                          <p>{faq.answer}</p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="accordion-item">
-                  <h2 className="accordion-header" id="headingTwo">
-                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                      Child policy
-                    </button>
-                  </h2>
-                  <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#tourPlan">
-                    <div className="accordion-body">
-                      <ul>
-                        <li><i className="bi bi-check-lg" />Children under 3 years will be considered as Infant and entry will be free of cost.</li>
-                        <li><i className="bi bi-check-lg" />Children 4 to 12 years will be charged as child rate</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div className="accordion-item">
-                  <h2 className="accordion-header" id="headingThree">
-                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                      Facilities
-                    </button>
-                  </h2>
-                  <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#tourPlan">
-                    <div className="accordion-body">
-                      <ul>
-                        <li><i className="bi bi-check-lg" /> Washroom</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
+                  );
+                })}
               </div>
+
               <div className="tour-location">
                 <h4>Location Map</h4>
-                <div className="map-area mb-30">
-                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193325.0481540361!2d-74.06757856146028!3d40.79052383652264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sbd!4v1660366711448!5m2!1sen!2sbd" width={600} height={450} style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
-                </div>
+                <div className="map-area mb-30" dangerouslySetInnerHTML={{ __html: attraction.location_map }}></div>
               </div>
-              <div className="review-wrapper">
+              {/* <div className="review-wrapper">
                 <h4>Customer Review</h4>
                 <div className="review-box">
                   <div className="total-review">
@@ -214,7 +217,6 @@ const AttractionDetailsPage = ({ params }) => {
                       <span>2590 Reviews</span>
                     </div>
                   </div>
-                  {/* modal for review */}
                   <div className="modal fade" id="exampleModalToggle" aria-hidden="true" tabIndex={-1}>
                     <div className="modal-dialog modal-dialog-centered">
                       <div className="modal-content">
@@ -571,18 +573,18 @@ const AttractionDetailsPage = ({ params }) => {
                     </li>
                   </ul>
                 </div>
-              </div>
+              </div> */}
             </div>
             <div className="col-xl-4">
               <div className="booking-form-wrap mb-30">
                 <h4>Reserve Your Activity</h4>
                 <p>Secure your spot for an unforgettable nature adventure now!</p>
                 <div className="nav nav-pills mb-40" role="tablist">
-                  <button className="nav-link show active" id="v-pills-booking-tab" data-bs-toggle="pill" data-bs-target="#v-pills-booking" type="button" role="tab" aria-controls="v-pills-booking" aria-selected="true">Online Booking</button>
-                  <button className="nav-link" id="v-pills-contact-tab" data-bs-toggle="pill" data-bs-target="#v-pills-contact" type="button" role="tab" aria-controls="v-pills-contact" aria-selected="false">Inquiry Form</button>
+                  {/* <button className="nav-link show active" id="v-pills-booking-tab" data-bs-toggle="pill" data-bs-target="#v-pills-booking" type="button" role="tab" aria-controls="v-pills-booking" aria-selected="true">Online Booking</button> */}
+                  <button className="nav-link active" id="v-pills-contact-tab" data-bs-toggle="pill" data-bs-target="#v-pills-contact" type="button" role="tab" aria-controls="v-pills-contact" aria-selected="false">Inquiry Form</button>
                 </div>
                 <div className="tab-content" id="v-pills-tabContent2">
-                  <div className="tab-pane fade active show" id="v-pills-booking" role="tabpanel" aria-labelledby="v-pills-booking-tab">
+                  {/* <div className="tab-pane fade active show" id="v-pills-booking" role="tabpanel" aria-labelledby="v-pills-booking-tab">
                     <div className="sidebar-booking-form">
                       <form>
                         <div className="tour-date-wrap mb-50">
@@ -675,8 +677,8 @@ const AttractionDetailsPage = ({ params }) => {
                         <button type="submit" className="primary-btn1 two">Book Now</button>
                       </form>
                     </div>
-                  </div>
-                  <div className="tab-pane fade" id="v-pills-contact" role="tabpanel" aria-labelledby="v-pills-contact-tab">
+                  </div> */}
+                  <div className="tab-pane fade active show" id="v-pills-contact" role="tabpanel" aria-labelledby="v-pills-contact-tab">
                     <div className="sidebar-booking-form">
                       <form>
                         <div className="form-inner mb-20">

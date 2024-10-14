@@ -4,7 +4,7 @@ const Breadcrumb = () => {
     return (
         <>
             <div className="about-breadcrum-section mb-120">
-                <div className="container-fluid">
+                <div className="container">
                     <div className="row">
                         <div className="col-lg-12">
                             <div className="banner-content">

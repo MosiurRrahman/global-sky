@@ -76,6 +76,10 @@ export const getWhyChooseUs = async () => {
 export const getSearchData = async () => {
     return await fetchWithRetry(base_url + 'api/page/home/search-bar');
 };
+// Function to fetch "Why Choose Us" data
+export const getBannerData = async () => {
+    return await fetchWithRetry(base_url + 'api/page/home/top-slider');
+};
 
 // Function to fetch attractions data
 export const getattructions = async () => {
@@ -90,6 +94,20 @@ export const getReviews = async () => {
 export const getattructionsDetails = async (slug) => {
     try {
         const response = await fetch(`${base_url}api/attraction/${encodeURIComponent(slug)}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch attraction details');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching attraction details:', error);
+        return null;
+    }
+};
+// Function to fetch attraction details using slug
+export const getPromotions = async (slug) => {
+    try {
+        const response = await fetch(`${base_url}api/promotions/${encodeURIComponent(slug)}`);
         if (!response.ok) {
             throw new Error('Failed to fetch attraction details');
         }
