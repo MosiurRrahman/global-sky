@@ -1,13 +1,12 @@
-"use client"; // Required if using React hooks in a component
+"use client"; // Required for React hooks
 
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation'; // Updated import
 import Breadcrumb from '@/components/layout/Breadcrumb';
 import { getVisaDetails } from '@/utils/getApi'; // Adjust the path to match your project structure
 import { base_url } from '@/utils/const';
-import Error from '@/components/Error';
 
-const VisaDetails = () => {
+const VisaDetailsComponent = () => {
   const searchParams = useSearchParams(); // Use search params for query parameters
   const country = searchParams.get('country'); // Extract country from search params
   const category = searchParams.get('category'); // Extract category from search params
@@ -15,6 +14,7 @@ const VisaDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [documents, setDocuments] = useState([]);
+
   useEffect(() => {
     // Add the class to the body element when the component is mounted
     document.body.classList.add('backgraound-color');
@@ -24,6 +24,7 @@ const VisaDetails = () => {
       document.body.classList.remove('backgraound-color');
     };
   }, []);
+
   useEffect(() => {
     // Check if visaDetails contains stringified JSON and parse it
     if (visaDetails?.data?.visaDetails?.sample_documents) {
@@ -31,6 +32,7 @@ const VisaDetails = () => {
       setDocuments(parsedDocuments);
     }
   }, [visaDetails]);
+
   useEffect(() => {
     if (country && category) {
       const fetchDetails = async () => {
@@ -52,22 +54,29 @@ const VisaDetails = () => {
     }
   }, [country, category]); // Re-run when country or category changes
 
-  console.log(visaDetails);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
+  if (error) {
+    return <div className="d-flex justify-content-center text-danger mb-50">{error.message}</div>;
+  }
 
   return (
-    <Suspense fallback={<div>loading</div>}>
-
-      {
-        visaDetails?.status ? <>
+    <>
+      {visaDetails?.status ? (
+        <>
           {/* Render the visa details */}
           <div className="about-breadcrum-section mb-120">
             <div className="container-fluid">
               <div className="row">
                 <div className="col-lg-12">
-                  <div className="banner-content" style={{
-                    backgroundImage: `linear-gradient(270deg, rgba(0, 0, 0, .3), rgba(0, 0, 0, 0.3) 101.02%), url(${base_url}${visaDetails.data.visaDetails?.banner || 'assets/img/innerpage/inner-banner-bg.png'})`
-                  }} >
+                  <div
+                    className="banner-content"
+                    style={{
+                      backgroundImage: `linear-gradient(270deg, rgba(0, 0, 0, .3), rgba(0, 0, 0, 0.3) 101.02%), url(${base_url}${visaDetails.data.visaDetails?.banner || 'assets/img/innerpage/inner-banner-bg.png'})`,
+                    }}
+                  >
                     <span>{visaDetails.data.visaDetails?.title}</span>
                     <h1>Get Your {visaDetails.data.visaDetails?.get_country.name} Visa</h1>
                   </div>
@@ -75,41 +84,8 @@ const VisaDetails = () => {
               </div>
             </div>
           </div>
-          <div>
-          </div>
-          <div style={{ display: 'none' }} className="my-template">
-            <div id="mytmp" className="dz-preview dz-file-preview">
-              <div className="dz-image"><img data-dz-thumbnail /></div>
-              <div className="dz-details">
-                <div className="dz-size"><span data-dz-size /></div>
-                <div className="dz-filename"><span data-dz-name /></div>
-              </div>
-              <div className="dz-progress">
-                <span className="dz-upload" data-dz-uploadprogress />
-              </div>
-              <div className="dz-error-message"><span data-dz-errormessage /></div>
-              <div className="dz-success-mark">
-                <svg xmlns="http://www.w3.org/2000/svg" height="54px" viewBox="0 0 54 54" width="54px" fill="#000000">
-                  <path d="M0 0h24v24H0z" fill="none" />
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                </svg>
-              </div>
-              <div className="dz-error-mark">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
-                  <path d="M0 0h24v24H0z" fill="none" />
-                  <circle cx={12} cy={19} r={2} />
-                  <path d="M10 3h4v12h-4z" />
-                </svg>
-              </div>
-              <div className="dz-remove" data-dz-remove>
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
-                  <path d="M0 0h24v24H0z" fill="none" />
-                  <path d="M14.59 8L12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41 14.59 8zM12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z">
-                  </path>
-                </svg>
-              </div>
-            </div>
-          </div>
+
+          {/* Visa details and tabs */}
           <div className="visa-details-section mb-90">
             <div className="container">
               <div className="row">
@@ -274,25 +250,30 @@ const VisaDetails = () => {
                               </li>
                             </ul>
                             <h6>AED {offer.price} / <span>Person</span></h6>
-                            <span><img src="/assets/image/alart.svg" alt="alart.svg" /> Visa issuance rights reserved by the embassy</span>
+                            <span><img src="/assets/image/alart.svg" alt="" /> Visa issuance rights reserved by the embassy</span>
                           </div>
                           <button data-bs-toggle="modal" data-bs-target="#visa-apply-modal">SELECT OFFER</button>
                         </div>
                       })
                     }
 
-                   
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div id="imageModal" className="image-modal">
-            <span className="close">×</span>
-            <img className="modal-image" id="modalImage" />
-          </div></> : <Error massage={visaDetails?.message} />
-      }
+        </>
+      ) : (
+        <h2 className="d-flex justify-content-center text-danger mb-50">{visaDetails?.message}</h2>
+      )}
+    </>
+  );
+};
 
+const VisaDetails = () => {
+  return (
+    <Suspense fallback={<div>Loading Visa Details...</div>}>
+      <VisaDetailsComponent />
     </Suspense>
   );
 };
