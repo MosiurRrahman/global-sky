@@ -1,0 +1,306 @@
+[
+    {
+        "id": "1",
+        "label": "Home",
+        "link": "/",
+        "icon": true,
+        "subMenu": [
+            {
+                "id": "1",
+                "label": "Marketing Agency",
+                "link": "/",
+                "icon": false
+            },
+            {
+                "id": "2",
+                "label": "SEO Company",
+                "link": "/seo-company",
+                "icon": false
+            },
+            {
+                "id": "3",
+                "label": "Social Marketing",
+                "link": "/social-marketing",
+                "icon": false
+            },
+            {
+                "id": "4",
+                "label": "Marketing Consulting",
+                "link": "/marketing-consulting",
+                "icon": false
+            },
+            {
+                "id": "5",
+                "label": "Digital Marketing",
+                "link": "/digital-marketing",
+                "icon": false
+            },
+            {
+                "id": "6",
+                "label": "AI SEO Software",
+                "link": "/ai-seo-software",
+                "icon": false
+            }
+        ]
+    },
+    {
+        "id": "2",
+        "label": "Solutions",
+        "link": "/services",
+        "icon": true,
+        "subMenu": [
+            {
+                "id": "1",
+                "icon": false,
+                "label": "Services",
+                "link": "/services"
+            },
+            {
+                "id": "2",
+                "icon": false,
+                "label": "Service Details",
+                "link": "/service-details"
+            }
+        ]
+
+    },
+    {
+        "id": "3",
+        "label": "Case Study",
+        "link": "/case-study",
+        "icon": true,
+        "subMenu": [
+            {
+                "id": "1",
+                "icon": false,
+                "label": "Case Study",
+                "link": "/case-study"
+            },
+            {
+                "id": "2",
+                "icon": false,
+                "label": "Case Study Details",
+                "link": "/case-study-details"
+            }
+        ]
+
+    },
+    {
+        "id": "4",
+        "label": "Blog",
+        "link": "/blog",
+        "icon": true,
+        "subMenu": [
+            {
+                "id": "1",
+                "icon": false,
+                "label": "Blog Grid",
+                "link": "/blog"
+            },
+           
+            {
+                "id": "2",
+                "icon": false,
+                "label": "Blog Sidebar",
+                "link": "/blog/blog-sidebar"
+            },
+            {
+                "id": "3",
+                "icon": false,
+                "label": "Blog Standard",
+                "link": "/blog/blog-standard"
+            },
+            {
+                "id": "4",
+                "icon": false,
+                "label": "Blog Details",
+                "link": "/blog/blog-details"
+            }
+        ]
+
+    },
+   
+   
+    {
+        "id": "5",
+        "label": "Pages",
+        "link": "#",
+        "icon": true,
+        "subMenu": [
+            {
+                "id": "1",
+                "icon": false,
+                "label": "about us",
+                "link": "/about"
+            },
+            {
+                "id": "2",
+                "icon": false,
+                "label": "Why Choose Us",
+                "link": "/why-choose-us"
+            },
+            {
+                "id": "3",
+                "label": "Portfolio",
+                "link": "/portfolio",
+                "icon": true,
+                "subMenu": [
+                    {
+                        "id": "1",
+                        "icon": false,
+                        "label": "Portfolio Grid Style 01",
+                        "link": "/portfolio"
+                    },
+                    {
+                        "id": "2",
+                        "icon": false,
+                        "label": "Portfolio Grid Style 02",
+                        "link": "/portfolio/grid2"
+                    },
+                    {
+                        "id": "3",
+                        "icon": false,
+                        "label": "Portfolio Grid Style 03",
+                        "link": "/portfolio/grid3"
+                    },
+                    {
+                        "id": "4",
+                        "icon": false,
+                        "label": "Portfolio Masonry",
+                        "link": "/portfolio/masonry"
+                    },
+                    {
+                        "id": "5",
+                        "icon": false,
+                        "label": "Portfolio Info Flow",
+                        "link": "/portfolio/info-flow"
+                    },
+                    {
+                        "id": "6",
+                        "icon": false,
+                        "label": "Portfolio Details",
+                        "link": "/portfolio/details"
+                    }
+                ]
+            },
+            {
+                "id": "4",
+                "icon": false,
+                "label": "Our Team",
+                "link": "/team"
+            },
+         
+            {
+                "id": "5",
+                "label": "Career",
+                "link": "/career-list",
+                "icon": true,
+                "subMenu": [
+                    {
+                        "id": "1",
+                        "icon": false,
+                        "label": "Career List",
+                        "link": "/career-list"
+                    },
+                    {
+                        "id": "2",
+                        "icon": false,
+                        "label": "Career Details",
+                        "link": "/career-details"
+                    }
+                ]
+            },
+         
+            {
+                "id": "6",
+                "label": "Shop",
+                "link": "/shop",
+                "icon": true,
+                "subMenu": [
+                    {
+                        "id": "1",
+                        "icon": false,
+                        "label": "Shop",
+                        "link": "/shop"
+                    },
+                    {
+                        "id": "2",
+                        "icon": false,
+                        "label": "Product Details",
+                        "link": "/shop/product-details"
+                    },
+                    {
+                        "id": "3",
+                        "icon": false,
+                        "label": "Cart",
+                        "link": "/shop/cart"
+                    },
+                    {
+                        "id": "4",
+                        "icon": false,
+                        "label": "Checkout",
+                        "link": "/shop/checkout"
+                    }
+                ]
+            },
+            {
+                "id": "7",
+                "label": "Pricing Plan",
+                "link": "/pricing-plan",
+                "icon": true,
+                "subMenu": [
+                    {
+                        "id": "1",
+                        "icon": false,
+                        "label": "Pricing Plan Style 01",
+                        "link": "/pricing-plan"
+                    },
+                    {
+                        "id": "2",
+                        "icon": false,
+                        "label": "Pricing Plan Style 02",
+                        "link": "/pricing-plan/style2"
+                    },
+                    {
+                        "id": "3",
+                        "icon": false,
+                        "label": "Pricing Plan Style 03",
+                        "link": "/pricing-plan/style3"
+                    }
+                    ,
+                    {
+                        "id": "4",
+                        "icon": false,
+                        "label": "Pricing Plan Style 04",
+                        "link": "/pricing-plan/style4"
+                    }
+                    ,
+                    {
+                        "id": "4",
+                        "icon": false,
+                        "label": "Pricing Plan Style 05",
+                        "link": "/pricing-plan/style5"
+                    }
+                ]
+            },
+            {
+                "id": "8",
+                "icon": false,
+                "label": "FAQs",
+                "link": "/faq"
+            },
+            {
+                "id": "9",
+                "icon": false,
+                "label": "Error 404",
+                "link": "/error-404"
+            }
+        ]
+    },
+    {
+        "id": "6",
+        "label": "Contact Us",
+        "link": "/contact",
+        "icon": true
+    }
+]
