@@ -511,7 +511,7 @@ const VisaDetailsComponent = () => {
                                 <h6>{offer.max_stay}</h6>
                               </li>
                             </ul>
-                            <h6>AED {offer.price} / <span>Person</span></h6>
+                            <h6>{visaDetails.data.currency} {offer.price} / <span>Person</span></h6>
                             <span><img src="/assets/image/alart.svg" alt="" /> Visa issuance rights reserved by the embassy</span>
                           </div>
                           <button data-bs-toggle="modal" data-bs-target="#visa-apply-modal">SELECT OFFER</button>

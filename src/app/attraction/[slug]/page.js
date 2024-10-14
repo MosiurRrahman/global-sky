@@ -44,7 +44,7 @@ const AttractionDetailsPage = ({ params }) => {
 
   return (
     <>
-      <div className="about-breadcrum-section mb-120">
+      {/* <div className="about-breadcrum-section mb-120">
         <div className="container">
           <div className="row">
             <div className="col-lg-12">
@@ -57,8 +57,8 @@ const AttractionDetailsPage = ({ params }) => {
             </div>
           </div>
         </div>
-      </div>
-      <div className="package-details-area mb-120">
+      </div> */}
+      <div className="package-details-area mt-120 mb-120">
         <div className="container">
           <div className="row">
             <div className="co-lg-12">

@@ -27,8 +27,8 @@ const CountryVisa = ({ data }) => {
                     <div className="row">
                         <div className="col-lg-12 mb-60">
                             <div className="section-title text-center">
-                                <h2>{data?.section?.title}</h2>
-                                <p>{data?.section?.sub_title}</p>
+                                <h2>{data.section.title}</h2>
+                                <p>{data.section.sub_title}</p>
                             </div>
                         </div>
                     </div>
@@ -60,15 +60,15 @@ const CountryVisa = ({ data }) => {
                                                 <div className="cart-area">
                                                     <Link href={`/visa-details?country=${item?.name}&category=${item.notes}`} className="content-top">
                                                         <div className="flag-icon">
-                                                            <img src={base_url + item?.flag} alt="" />
+                                                            <img src={base_url + item.flag} alt="" />
                                                         </div>
                                                         <h4>{item?.name}</h4>
-                                                        <p className="font-b">{item?.notes}</p>
+                                                        <p className="font-b">{item.notes}</p>
                                                         <p>{item?.summary}</p>
                                                     </Link>
                                                     <div className="contact-button">
                                                         <div className="chat-us-btn">
-                                                            <a href={`https://api.whatsapp.com/send/?phone=971552237719&text=Hello! Can I get more info about *${item?.name}*`}>Chat With Us</a>
+                                                            <a href={`https://api.whatsapp.com/send/?phone=${data.whatsapp_number}&text=Hello! Can I get more info about *${item?.name}*`}>Chat With Us</a>
                                                         </div>
                                                         <div className="whatsup-icon">
                                                             <svg width={26} height={26} viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -165,7 +165,7 @@ const Banner = ({ data, banner }) => {
                             return(
                                
                                 <SwiperSlide key={index} className="swiper-slide">
-                            <div className="home1-banner-wrapper" style={{ backgroundImage: `linear-gradient(180deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${ base_url + item.image})` }}>
+                            <div className="home1-banner-wrapper" style={{ backgroundImage: `url(${ base_url + item.image})` }}>
                                 <div className="container">
                                     <div className="row">
                                         <div className="col-lg-12">
