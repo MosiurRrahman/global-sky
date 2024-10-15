@@ -147,20 +147,20 @@ export const getVisaDetails = async (country, category) => {
     }
 };
 
-// Function to fetch visa details using country and category
-export const getCountryVisaCategory = async (category) => {
-    try {
-        const response = await fetch(`${base_url}api/get/category/${encodeURIComponent(category)}`, {cache:"no-store"});
-        if (!response.ok) {
-            throw new Error('Failed to fetch visa details');
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching visa details:', error);
-        return null; // Return null in case of an error
-    }
-};
+// // Function to fetch visa details using country and category
+// export const getCountryVisaCategory = async (category) => {
+//     try {
+//         const response = await fetch(`${base_url}api/get/category/${encodeURIComponent(category)}`, {cache:"no-store"});
+//         if (!response.ok) {
+//             throw new Error('Failed to fetch visa details');
+//         }
+//         const data = await response.json();
+//         return data;
+//     } catch (error) {
+//         console.error('Error fetching visa details:', error);
+//         return null; // Return null in case of an error
+//     }
+// };
 
 
 
