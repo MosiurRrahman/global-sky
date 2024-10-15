@@ -8,7 +8,7 @@ import Testimonial from "@/components/Testimonial";
 import VisaDetails from "@/components/VisaDetails";
 
 // Import API functions
-import { getBanner, getBannerData, getCountrySpecialists, getCountryVisaCategory, getofferSliderData, getReviews, getSearchData, getSliderData, getVisaCategory, getWhyChooseUs } from "@/utils/getApi";
+import { getBanner, getBannerData, getCountrySpecialists,  getofferSliderData, getReviews, getSearchData, getSliderData, getVisaCategory, getWhyChooseUs } from "@/utils/getApi";
 
 export default async function Home() {
   // Fetch data using the API functions
@@ -19,14 +19,12 @@ export default async function Home() {
   const getofferSlider = await getofferSliderData();
   const getReviewsData = await getReviews();
   const getSearch = await getSearchData();
-  const countryVisaCategory = await getCountryVisaCategory();
-  // const getbannerData = await getBanner();
   const getBanner = await getBannerData();
 
   return (
     <>
       <Banner  banner={getBanner?.data}  />
-      <VisaDetails data={getSearch?.data} countryVisaCategory = {countryVisaCategory.data}  />
+      <VisaDetails data={getSearch?.data}  />
       <CountryVisa data={countryData?.data} />
       <Destination data={getofferSlider.data} />
       <StudentVisa data={sliderData?.data} />

@@ -35,7 +35,7 @@ const CountryVisa = ({ data }) => {
                     <div className="row gy-4">
                         {data?.countries?.slice(0, visibleItems).map((item, index) => {
 
-                                console.log(item);
+                               
                                 
                             return (
                                 <div key={index} className="col-xl-3 col-lg-4 col-md-6 col-sm-6">

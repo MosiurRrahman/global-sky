@@ -8,20 +8,82 @@ import React, { useState, useMemo, useEffect, useRef } from "react";
 const VisaDetails = ({data}) => {
     const router = useRouter();
      // State for selected values
-     const [selectedCountry, setSelectedCountry] = useState("");
-     const [selectedCategory, setSelectedCategory] = useState("");
+      // State for selected values
+    const [selectedCountry, setSelectedCountry] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [categories, setCategories] = useState([]); // Holds categories based on selected country
+    const [countries, setCountries] = useState([]); // Holds countries data
+
+    // Dropdown open/close state
+    const [isActiveCountry, setIsActiveCountry] = useState(false);
+    const [isActiveCategory, setIsActiveCategory] = useState(false);
+
+    // Refs for dropdowns
+    const dropdownRefCountry = useRef(null);
+    const dropdownRefCategory = useRef(null);
+
+    // Fetch countries on mount
+    useEffect(() => {
+        const fetchCountries = async () => {
+            try {
+                const response = await fetch(`${base_url+"api/page/home/search-bar"}`); // Update to your countries API
+                const data = await response.json();
+               
+                
+                setCountries(data.data.countries); // Load countries data
+            } catch (error) {
+                console.error("Failed to fetch countries:", error);
+            }
+        };
+        fetchCountries(); // Fetch countries when component mounts
+    }, []);
+
+    // Fetch categories based on selected country
+    const fetchCategoriesForCountry = async (countryId) => {
+        try {
+            const response = await fetch(`${base_url}api/get/category/${countryId}`); // Update to your categories API
+            const data = await response.json();
+            console.log("countri",data);
+            
+            setCategories(data.data); // Set categories for selected country
+        } catch (error) {
+            console.error("Failed to fetch categories:", error);
+            setCategories([]); // Clear categories on error
+        }
+    };
+
+    // Handle country selection
+    const handleSelectCountry = (country) => {
+        setSelectedCountry(country.name);
+        setIsActiveCountry(false);
+        // Fetch categories for the selected country
+        fetchCategoriesForCountry(country.id); // Call the category API with country ID
+    };
+
+    // Handle category selection
+    const handleSelectCategory = (category) => {
+        setSelectedCategory(category);
+        setIsActiveCategory(false);
+    };
+
+    // Handle form submission
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (selectedCountry && selectedCategory) {
+            const queryUrl = `/visa-details?country=${encodeURIComponent(selectedCountry)}&category=${encodeURIComponent(selectedCategory)}`;
+            router.push(queryUrl); // Redirect with selected values
+        } else {
+            alert("Please select both country and category");
+        }
+    };
      const [selectedNationality, setSelectedNationality] = useState("");
      const [selectedResidency, setSelectedResidency] = useState("");
  
      // Dropdown open/close state
-     const [isActiveCountry, setIsActiveCountry] = useState(false);
-     const [isActiveCategory, setIsActiveCategory] = useState(false);
      const [isActiveNationality, setIsActiveNationality] = useState(false);
      const [isActiveResidency, setIsActiveResidency] = useState(false);
  
      // Refs for dropdowns
-     const dropdownRefCountry = useRef(null);
-     const dropdownRefCategory = useRef(null);
      const dropdownRefNationality = useRef(null);
      const dropdownRefResidency = useRef(null);
  
@@ -30,17 +92,16 @@ const VisaDetails = ({data}) => {
      const handleToggleCategory = () => setIsActiveCategory(!isActiveCategory);
      const handleToggleNationality = () => setIsActiveNationality(!isActiveNationality);
      const handleToggleResidency = () => setIsActiveResidency(!isActiveResidency);
+     useEffect(() => {
+        // Fetch categories (this can be from an API or static data)
+        const fetchCategories = async () => {
+          const response = await fetch('/api/categories');
+          const data = await response.json();
+          setSelectedCountry(data);
+        };
+        fetchCategories();
+      }, []);
  
-     // Select handlers
-     const handleSelectCountry = (country) => {
-         setSelectedCountry(country);
-         setIsActiveCountry(false);
-     };
- 
-     const handleSelectCategory = (category) => {
-         setSelectedCategory(category);
-         setIsActiveCategory(false);
-     };
  
      const handleSelectNationality = (nationality) => {
          setSelectedNationality(nationality);
@@ -52,19 +113,7 @@ const VisaDetails = ({data}) => {
          setIsActiveResidency(false);
      };
  
-     // Handle form submission
-     const handleSubmit = (e) => {
-         e.preventDefault(); // Prevent default form submission
- 
-         // Check if both country and category are selected
-         if (selectedCountry && selectedCategory) {
-             // Redirect to the visa-details page with query params
-             const queryUrl = `/visa-details?country=${encodeURIComponent(selectedCountry)}&category=${encodeURIComponent(selectedCategory)}`;
-             router.push(queryUrl); // Redirect to visa-details page
-         } else {
-             alert("Please select both country and category");
-         }
-     };
+  
   return (
     <div className="package-search-filter-wrapper mb-120">
     <div className="container">
@@ -105,68 +154,68 @@ const VisaDetails = ({data}) => {
                                 <div className="row g-xl-4 gy-4">
                                     {/* Country Dropdown */}
                                     <div className="col-xl-3 col-sm-6 d-flex justify-content-center">
-                                        <div className="single-search-box">
-                                            <div className="searchbox-input">
-                                                <label>Country</label>
-                                                <div className="custom-select-dropdown" ref={dropdownRefCountry}>
-                                                    <div className="select-input" onClick={handleToggleCountry}>
-                                                        <input type="text" readOnly value={selectedCountry || "Select Country"} />
-                                                        <i className="bi bi-chevron-down" />
-                                                    </div>
-                                                    <div className={`${isActiveCountry ? "active" : ""} custom-select-wrap`}>
-                                                        <ul className="option-list">
-                                                            {Array.isArray(data.countries) && data.countries.length > 0 ? (
-                                                                data.countries.map((country) => (
-                                                                    <li
-                                                                        key={country.id}
-                                                                        className="single-item"
-                                                                        onClick={() => handleSelectCountry(country.name)}
-                                                                    >
-                                                                        <h6>{country.name}</h6>
-                                                                        <img src={  base_url + country.flag} alt="image" />
-                                                                    </li>
-                                                                ))
-                                                            ) : (
-                                                                <li className="single-item"><h6>No options available</h6></li>
-                                                            )}
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                <div className="single-search-box">
+                    <div className="searchbox-input">
+                        <label>Country</label>
+                        <div className="custom-select-dropdown" ref={dropdownRefCountry}>
+                            <div className="select-input" onClick={() => setIsActiveCountry(!isActiveCountry)}>
+                                <input type="text" readOnly value={selectedCountry || "Select Country"} />
+                                <i className="bi bi-chevron-down" />
+                            </div>
+                            <div className={`${isActiveCountry ? "active" : ""} custom-select-wrap`}>
+                                <ul className="option-list">
+                                    {Array.isArray(countries) && countries.length > 0 ? (
+                                        countries.map((country) => (
+                                            <li
+                                                key={country.id}
+                                                className="single-item"
+                                                onClick={() => handleSelectCountry(country)}
+                                            >
+                                                <h6>{country.name}</h6>
+                                                <img src={ base_url + country.flag} alt="Country flag" />
+                                            </li>
+                                        ))
+                                    ) : (
+                                        <li className="single-item"><h6>No options available</h6></li>
+                                    )}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
                                     {/* Category Dropdown */}
                                     <div className="col-xl-3 col-sm-6 d-flex justify-content-center">
-                                        <div className="single-search-box">
-                                            <div className="searchbox-input">
-                                                <label>Category</label>
-                                                <div className="custom-select-dropdown" ref={dropdownRefCategory}>
-                                                    <div className="select-input" onClick={handleToggleCategory}>
-                                                        <input type="text" readOnly value={selectedCategory || "Select Category"} />
-                                                        <i className="bi bi-chevron-down" />
-                                                    </div>
-                                                    <div className={`${isActiveCategory ? "active" : ""} custom-select-wrap`}>
-                                                        <ul className="option-list">
-                                                            {Array.isArray(data.categories) && data.categories.length > 0 ? (
-                                                                data.categories.map((category) => (
-                                                                    <li
-                                                                        key={category.id}
-                                                                        className="single-item"
-                                                                        onClick={() => handleSelectCategory(category.name)}
-                                                                    >
-                                                                        <h6>{category.name}</h6>
-                                                                    </li>
-                                                                ))
-                                                            ) : (
-                                                                <li className="single-item"><h6>No options available</h6></li>
-                                                            )}
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                <div className="single-search-box">
+                    <div className="searchbox-input">
+                        <label>Category</label>
+                        <div className="custom-select-dropdown" ref={dropdownRefCategory}>
+                            <div className="select-input" onClick={() => setIsActiveCategory(!isActiveCategory)}>
+                                <input type="text" readOnly value={selectedCategory || "Select Category"} />
+                                <i className="bi bi-chevron-down" />
+                            </div>
+                            <div className={`${isActiveCategory ? "active" : ""} custom-select-wrap`}>
+                                <ul className="option-list">
+                                    {Array.isArray(categories) && categories.length > 0 ? (
+                                        categories.map((category) => (
+                                            <li
+                                                key={category.id}
+                                                className="single-item"
+                                                onClick={() => handleSelectCategory(category.name)}
+                                            >
+                                                <h6>{category.name}</h6>
+                                            </li>
+                                        ))
+                                    ) : (
+                                        <li className="single-item"><h6>No options available</h6></li>
+                                    )}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
                                     {/* Nationality Dropdown */}
                                     <div className="col-xl-3 col-sm-6 d-flex justify-content-center">
