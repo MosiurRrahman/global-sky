@@ -75,20 +75,25 @@ const Destination = ({ data }) => {
                             <Swiper {...settings} className="swiper offer-banner-slider">
                                 <div className="swiper-wrapper">
                                     {
-                                        data?.get_section_items?.map((item, index) => {
+                                        data.get_section_items.map((item, index) => {
 
                                             return (
                                                 <SwiperSlide key={index} className="swiper-slide">
-                                                    <div className="offer-card">
-                                                        <img src={base_url + item.image} alt="image" />
-                                                        <div className="offer-card-content style-2">
-                                                            <span>{item.title}</span>
-                                                            <h2>{item?.sub_title}</h2>
-                                                            <h6>{item?.description}</h6>
-                                                            {/* <Link href={item.custom_url} className="primary-btn1 style-2">View Details</Link> */}
-                                                        </div>
+                                                <div className="offer-card">
+                                                    <img src={base_url + item.image} alt="image" />
+                                                    <div className="offer-card-content style-2">
+                                                        <span>{item.title}</span>
+                                                        <h2>{item?.sub_title}</h2>
+                                                        <h6>{item?.description}</h6>
+                                                        {item.custom_url ? (
+                                                            <Link href={item.custom_url} className="primary-btn1 style-2">View Details</Link>
+                                                        ) : (
+                                                            <button className="primary-btn1 style-2" disabled>No Link Available</button>
+                                                        )}
                                                     </div>
-                                                </SwiperSlide>
+                                                </div>
+                                            </SwiperSlide>
+                                            
                                             )
                                         })
                                     }

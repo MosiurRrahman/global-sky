@@ -93,7 +93,7 @@ export const getReviews = async () => {
 // Function to fetch attraction details using slug
 export const getattructionsDetails = async (slug) => {
     try {
-        const response = await fetch(`${base_url}api/attraction/${encodeURIComponent(slug)}`);
+        const response = await fetch(`${base_url}api/attraction/${encodeURIComponent(slug)}` );
         if (!response.ok) {
             throw new Error('Failed to fetch attraction details');
         }
@@ -107,7 +107,7 @@ export const getattructionsDetails = async (slug) => {
 // Function to fetch attraction details using slug
 export const getPromotions = async (slug) => {
     try {
-        const response = await fetch(`${base_url}api/promotions/${encodeURIComponent(slug)}`);
+        const response = await fetch(`${base_url}api/promotions/${encodeURIComponent(slug)}` , {cache:"no-store"});
         if (!response.ok) {
             throw new Error('Failed to fetch attraction details');
         }
@@ -135,7 +135,7 @@ export const getSlug = async (slug) => {
 // Function to fetch visa details using country and category
 export const getVisaDetails = async (country, category) => {
     try {
-        const response = await fetch(`${base_url}api/visa-details?country=${encodeURIComponent(country)}&category=${encodeURIComponent(category)}`);
+        const response = await fetch(`${base_url}api/visa-details?country=${encodeURIComponent(country)}&category=${encodeURIComponent(category)}` , {cache:"no-store"});
         if (!response.ok) {
             throw new Error('Failed to fetch visa details');
         }
@@ -147,5 +147,20 @@ export const getVisaDetails = async (country, category) => {
     }
 };
 
-// pages/api/page/[slug].js
+// Function to fetch visa details using country and category
+export const getCountryVisaCategory = async (category) => {
+    try {
+        const response = await fetch(`${base_url}api/get/category/${encodeURIComponent(category)}`, {cache:"no-store"});
+        if (!response.ok) {
+            throw new Error('Failed to fetch visa details');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching visa details:', error);
+        return null; // Return null in case of an error
+    }
+};
+
+
 

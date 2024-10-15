@@ -1,12 +1,10 @@
 import Breadcrumb from '@/components/layout/Breadcrumb'
 import { base_url } from '@/utils/const';
 import { getattructions } from '@/utils/getApi';
-import { slugify } from '@/utils/slugify'
 import Link from 'next/link'
 import React from 'react'
 
 export default async function Attractionpage() {
-
     const attractions = await getattructions();
 
     return (
@@ -16,7 +14,7 @@ export default async function Attractionpage() {
                 <div className="container">
                     <div className="row g-4">
                         {
-                            attractions?.data?.map((item) => {
+                            attractions.data.map((item) => {
                                 // Get the reviews
                                 const reviews = item.get_reviews || [];
                                 const totalReviews = reviews.length;
@@ -29,11 +27,11 @@ export default async function Attractionpage() {
                                 return (
                                     <div key={item.id} className="col-lg-4 col-md-6">
                                         <div className="attraction-card">
-                                            <Link href={`/attraction/${slugify(item.slug)}`} className="attraction-card-img">
+                                            <Link href={`/attraction/${item.slug}`} className="attraction-card-img">
                                                 <img src={base_url + item.thumb_image} alt={item.title} />
-                                                <div className="batch">
+                                                {/* <div className="batch">
                                                     <span>Popular</span>
-                                                </div>
+                                                </div> */}
                                             </Link>
                                             <div className="attraction-card-content">
                                                 <div className="card-content-top">
@@ -47,7 +45,7 @@ export default async function Attractionpage() {
                                                         </ul>
                                                         <span>({totalReviews} {totalReviews === 1 ? 'Review' : 'Reviews'})</span>
                                                     </div>
-                                                    <h5><Link href={`/attraction/${slugify(item.slug)}`}>{item.title}</Link></h5>
+                                                    <h5><Link href={`/attraction/${item.slug}`}>{item.title}</Link></h5>
                                                     <ul className="feature-list">
                                                         <li>
                                                         <svg className="with-stroke" xmlns="http://www.w3.org/2000/svg" width={14} height={14} viewBox="0 0 14 14">

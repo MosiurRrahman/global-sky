@@ -12,7 +12,31 @@ import { base_url } from "@/utils/const";
 SwiperCore.use([Autoplay, EffectFade, Navigation, Pagination]);
 
 const Testimonial = ({ data }) => {
-    
+    const timeAgo = (date) => {
+        const now = new Date();
+        const reviewDate = new Date(date);
+        const diffInSeconds = Math.floor((now - reviewDate) / 1000);
+
+        const intervals = {
+            year: 31536000,
+            month: 2592000,
+            week: 604800,
+            day: 86400,
+            hour: 3600,
+            minute: 60,
+            second: 1
+        };
+
+        for (const interval in intervals) {
+            const timePassed = Math.floor(diffInSeconds / intervals[interval]);
+            if (timePassed > 1) {
+                return `${timePassed} ${interval}s ago`;
+            } else if (timePassed === 1) {
+                return `1 ${interval} ago`;
+            }
+        }
+        return "Just now";
+    };
 
     const settings = useMemo(() => {
         return {
@@ -65,8 +89,8 @@ const Testimonial = ({ data }) => {
                     <div className="row">
                         <div className="col-lg-12 mb-40">
                             <div className="section-title style-2 text-center">
-                                <h2>{data.section.title}</h2>
-                                <p>{data.section.sub_title}</p>
+                                <h2>{data?.section?.title}</h2>
+                                <p>{data?.section?.sub_title}</p>
                             </div>
                         </div>
                     </div>
@@ -77,19 +101,39 @@ const Testimonial = ({ data }) => {
                                     <img src="assets/image/icon/global-icon.svg" alt="" />
                                 </div>
                                 <div className="global-visa-content">
-                                    <h6>{data.title}</h6>
+                                    <h6>Global Sky Visa Services</h6>
                                     <div className="rating">
-                                        <span>4.8</span>
-                                        <ul className="star">
-                                            <li><i className="bi bi-star-fill" /></li>
-                                            <li><i className="bi bi-star-fill" /></li>
-                                            <li><i className="bi bi-star-fill" /></li>
-                                            <li><i className="bi bi-star-fill" /></li>
-                                            <li><i className="bi bi-star-fill" /></li>
-                                        </ul>
+                                        {(() => {
+                                            const totalReviews = data?.reviews?.length;
+                                            const totalRating = data?.reviews?.reduce((acc, review) => acc + parseFloat(review.ratting), 0);
+                                            const avgRating = Number((totalRating / totalReviews).toFixed(1)); // Calculate average rating
+
+                                            return (
+                                                <>
+                                                    <span>{totalReviews}</span> {/* Display the average rating */}
+                                                    <ul className="star">
+                                                        {[...Array(5)].map((_, i) => {
+                                                            if (i < Math.floor(avgRating)) {
+                                                                // Full star
+                                                                return <li key={i}><i className="bi bi-star-fill" /></li>;
+                                                            } else if (i < Math.ceil(avgRating)) {
+                                                                // Half star
+                                                                return <li key={i}><i className="bi bi-star-half" /></li>;
+                                                            } else {
+                                                                // Empty star
+                                                                return <li key={i}><i className="bi bi-star" /></li>;
+                                                            }
+                                                        })}
+                                                    </ul>
+                                                    
+                                                </>
+                                            );
+                                        })()}
+
+
                                     </div>
-                                    <p>Based on 420 reviews
-                                        powered by
+                                    <p>Based on <span>{data.reviews.length}&nbsp;reviews&nbsp;</span>  
+                                        powered by 
                                         <svg width={58} height={20} viewBox="0 0 58 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M24.8206 10.5009C24.8206 13.2478 22.6717 15.2719 20.0346 15.2719C17.3974 15.2719 15.2485 13.2478 15.2485 10.5009C15.2485 7.73472 17.3974 5.72998 20.0346 5.72998C22.6717 5.72998 24.8206 7.73472 24.8206 10.5009ZM22.7254 10.5009C22.7254 8.78438 21.48 7.61 20.0346 7.61C18.5891 7.61 17.3437 8.7845 17.3437 10.5009C17.3437 12.2003 18.5891 13.3919 20.0346 13.3919C21.48 13.392 22.7254 12.1981 22.7254 10.5009Z" fill="#FF4131" />
                                             <path d="M35.1453 10.5009C35.1453 13.2478 32.9964 15.2719 30.3593 15.2719C27.7221 15.2719 25.5732 13.2478 25.5732 10.5009C25.5732 7.73687 27.7221 5.72998 30.3593 5.72998C32.9963 5.72998 35.1453 7.73472 35.1453 10.5009ZM33.0501 10.5009C33.0501 8.78438 31.8047 7.61 30.3593 7.61C28.9138 7.61 27.6684 8.7845 27.6684 10.5009C27.6684 12.2003 28.9138 13.3919 30.3593 13.3919C31.8047 13.392 33.0501 12.1981 33.0501 10.5009Z" fill="#FFBC00" />
@@ -152,7 +196,7 @@ const Testimonial = ({ data }) => {
                                                                         </div>
                                                                         <div className="author-content">
                                                                             <h6>{review.user}</h6>
-                                                                            <span>a year ago</span>
+                                                                            <span>{timeAgo(review.created_at)}</span> {/* Custom "time ago" */}
                                                                         </div>
                                                                     </div>
                                                                     <div className="author-text">
