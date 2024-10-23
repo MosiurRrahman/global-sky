@@ -1,22 +1,67 @@
-"use client"
+"use client";
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { getattructionsDetails } from '@/utils/getApi';
+import React, { useEffect, useState } from 'react';
+import { getAttractionDetails } from '@/utils/getApi';
+import ModalVideo from "react-modal-video";
 import Breadcrumb from '@/components/layout/Breadcrumb';
+import Lightbox from "yet-another-react-lightbox";
+import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 import { base_url } from '@/utils/const';
+import axios from 'axios';
 
 const AttractionDetailsPage = ({ params }) => {
-  const router = useRouter(); // Import the router from next/navigation
+  const router = useRouter();
   const { slug } = params; // Extract slug from the URL params
-
+  const [isOpenVideo, setOpenVideo] = useState(false);
   const [attraction, setAttraction] = useState(null);
+  const [currency, setCurrency] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isOpenimg, setOpenimg] = useState({
+    openingState: false,
+    openingIndex: 0,
+  });
 
+ // Initialize formData without attraction_id
+ const [formData, setFormData] = useState({
+  name: '',
+  email: '',
+  phone: '',
+  message: '',
+  attraction_id: null, // Set initial value to null
+});
+
+const handleChange = (e) => {
+  const { name, value } = e.target; // Destructure name and value
+  setFormData((prevData) => ({
+    ...prevData,
+    [name]: value,
+  }));
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    // Make sure to include attraction_id in the formData
+    const response = await axios.post(`${base_url}api/attraction/query/form`, formData, {
+      headers: {
+        'Content-Type': 'application/json', // Change to 'application/json' if needed
+      },
+    });
+    setTimeout(() => {
+      window.location.reload(); // Reload the current page
+  }, 2000);
+    alert(response.data.message);
+  } catch (error) {
+    console.error('Error submitting form:', error);
+  }
+};
 
   useEffect(() => {
     if (slug) {
       // Fetch the attraction details based on the slug
-      getattructionsDetails(slug).then((data) => {
+      getAttractionDetails(slug).then((data) => {
+    
+        setCurrency(data)
         setAttraction(data?.data || null);
         setLoading(false);
       });
@@ -31,33 +76,36 @@ const AttractionDetailsPage = ({ params }) => {
     return <div>Attraction not found</div>;
   }
 
-  const reviews = attraction.get_reviews || [];
-  const totalReviews = reviews.length;
+  const { thumb_image, gallery_images, video_path, video_poster, get_reviews = [] } = attraction;
+
+ 
+  
+  const totalReviews = get_reviews.length;
   const averageRating = totalReviews > 0
-    ? (reviews.reduce((acc, review) => acc + review.ratting, 0) / totalReviews).toFixed(1)
+    ? (get_reviews.reduce((acc, review) => acc + review.ratting, 0) / totalReviews).toFixed(1)
     : 'No ratings yet';
+
+  // Convert gallery_images JSON string to array
+  const parsedGalleryImages = JSON.parse(gallery_images || "[]");
+
+  // Lightbox slides: Start with thumb_image followed by gallery_images
+  const slides = [{ src: thumb_image }, ...parsedGalleryImages.map(img => ({ src: base_url + img }))];
 
   // Use the router to programmatically navigate
   const handleBooking = () => {
     router.push('/book-now'); // Navigate to the booking page
   };
+// Function to extract video ID from the iframe src
+const getVideoId = (url) => {
+  const regex = /embed\/([a-zA-Z0-9_-]+)/;
+  const match = url.match(regex);
+  return match ? match[1] : null; // Return the video ID if found
+};
 
+const videoId = getVideoId(video_path);
   return (
     <>
-      {/* <div className="about-breadcrum-section mb-120">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="banner-content" style={{
-                backgroundImage: `linear-gradient(270deg, rgba(0, 0, 0, 50%), rgba(0, 0, 0, 0.3) 50%), url(${attraction.banner === null?  '/assets/image/default-breadcrumb.png': base_url+attraction.banner })`
-              }} >
-                <span>{attraction.get_country.notes}</span>
-                <h1>Get Your {attraction.get_country.name} Visa</h1>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
+
       <div className="package-details-area mt-120 mb-120">
         <div className="container">
           <div className="row">
@@ -66,55 +114,53 @@ const AttractionDetailsPage = ({ params }) => {
                 <div className="row align-items-center g-3">
                   <div className="col-lg-6">
                     <div className="gallery-img-wrap">
-                      <img src="/assets/image/attraction-01.png" alt="attraction-01.png" />
-                      <a data-fancybox="gallery-01" href="/assets/image/attraction-01.png"><i className="bi bi-eye" /></a>
+                      {/* Thumb image from API */}
+                      <img style={{width:'630px', height:"412px"}}  className='thumb_image' src={base_url + thumb_image} alt="Attraction Thumbnail" />
+                      <a data-fancybox="gallery-01" onClick={() => setOpenimg({ openingState: true, openingIndex: 0 })}>
+                        <i className="bi bi-eye" />
+                      </a>
                     </div>
                   </div>
                   <div className="col-lg-6 h-100">
                     <div className="row g-3 h-100">
-
-                      <div className="col-6">
-                        <div className="gallery-img-wrap">
-                          <img src="/assets/image/attraction-02.png" alt="attraction-02.png" />
-                          <a data-fancybox="gallery-01" href="/assets/image/attraction-02.png"><i className="bi bi-eye" /></a>
+                      {parsedGalleryImages.slice(0, 2).map((img, index) => (
+                        <div className="col-6" key={index}>
+                          <div className="gallery-img-wrap">
+                            <img style={{width:'350px', height:"200px"}}  src={base_url + img} alt={`Attraction Gallery ${index + 2}`} />
+                            <a data-fancybox="gallery-01" onClick={() => setOpenimg({ openingState: true, openingIndex: index + 1 })}>
+                              <i className="bi bi-eye" />
+                            </a>
+                          </div>
                         </div>
-                      </div>
+                      ))}
                       <div className="col-6">
-                        <div className="gallery-img-wrap">
-                          <img src="/assets/image/attraction-03.png" alt="attraction-03.png" />
-                          <a data-fancybox="gallery-01" href="/assets/image/attraction-03.png"><i className="bi bi-eye" /></a>
+                        <div className="gallery-img-wrap active">
+                          <img style={{width:'350px', height:"200px"}} src={base_url + thumb_image} alt="View More" />
+                          <button className="StartSlideShowFirstImage" onClick={() => setOpenimg({ openingState: true, openingIndex: 0 })}>
+                            <i className="bi bi-plus-lg" /> View More Images
+                          </button>
                         </div>
                       </div>
                       <div className="col-6">
                         <div className="gallery-img-wrap active">
-                          <img src="/assets/image/attraction-04.png" alt="attraction-04.png" />
-                          <button className="StartSlideShowFirstImage"><i className="bi bi-plus-lg" /> View More Images</button>
-                        </div>
-                      </div>
-                      <div className="col-6">
-                        <div className="gallery-img-wrap active">
-                          <img src="/assets/image/attraction-05.png" alt="attraction-05.png" />
-                          <a data-fancybox="gallery-01" href="https://www.youtube.com/watch?v=u31qwQUeGuM"><i className="bi bi-play-circle" /> Watch Video</a>
+                          <img style={{width:'350px', height:"200px"}} src={base_url + video_poster} alt="Video Poster" />
+                          <a data-fancybox="gallery-01" onClick={() => setOpenVideo(true)}>
+                            <i className="bi bi-play-circle" /> Watch Video
+                          </a>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+
             </div>
-          </div>
-          <div className="others-image-wrap d-none">
-            <a href="/assets/image/attraction-01.png" data-fancybox="images"><img src="/assets/image/attraction-01.png" alt="attraction-01.png" /></a>
-            <a href="/assets/image/attraction-02.png" data-fancybox="images"><img src="/assets/image/attraction-02.png" alt="attraction-02.png" /></a>
-            <a href="/assets/image/attraction-03.png" data-fancybox="images"><img src="/assets/image/attraction-03.png" alt="attraction-03.png" /></a>
-            <a href="/assets/image/attraction-04.png" data-fancybox="images"><img src="/assets/image/attraction-04.png" alt="attraction-04.png" /></a>
-            <a href="/assets/image/attraction-05.png" data-fancybox="images"><img src="/assets/image/attraction-05.png" alt="attraction-05.png" /></a>
           </div>
           <div className="row g-xl-4 gy-5">
             <div className="col-xl-8">
               <h2>{attraction.title}</h2>
               <div className="tour-price">
-                <h3>${attraction.regular_price}/</h3><span>per person</span>
+                <h3>{currency.currency}&nbsp;{attraction.regular_price}/</h3><span>per person</span>
               </div>
               <ul className="tour-info-metalist">
                 <li>
@@ -680,22 +726,22 @@ const AttractionDetailsPage = ({ params }) => {
                   </div> */}
                   <div className="tab-pane fade active show" id="v-pills-contact" role="tabpanel" aria-labelledby="v-pills-contact-tab">
                     <div className="sidebar-booking-form">
-                      <form>
+                      <form  onSubmit={handleSubmit}>
                         <div className="form-inner mb-20">
                           <label>Full Name <span>*</span></label>
-                          <input type="text" placeholder="Enter your full name" />
+                          <input name='name' required value={formData.name} onChange={(e)=>handleChange(e)} type="text" placeholder="Enter your full name" />
                         </div>
                         <div className="form-inner mb-20">
                           <label>Email Address <span>*</span></label>
-                          <input type="email" placeholder="Enter your email address" />
+                          <input name='email' required value={formData.email} onChange={(e)=>handleChange(e)} type="email" placeholder="Enter your email address" />
                         </div>
                         <div className="form-inner mb-20">
                           <label>Phone Number  <span>*</span></label>
-                          <input type="text" placeholder="Enter your phone number" />
+                          <input name='phone' required value={formData.phone} onChange={(e)=>handleChange(e)} type="text" placeholder="Enter your phone number" />
                         </div>
                         <div className="form-inner mb-30">
                           <label>Write Your Massage <span>*</span></label>
-                          <textarea placeholder="Write your quiry" defaultValue={""} />
+                          <textarea  name='message' required value={formData.message} onChange={(e)=>handleChange(e)} placeholder="Write your quiry" defaultValue={""} />
                         </div>
                         <div className="form-inner">
                           <button type="submit" className="primary-btn1 two">Submit Now</button>
@@ -709,8 +755,27 @@ const AttractionDetailsPage = ({ params }) => {
           </div>
         </div>
       </div>
+      <Lightbox
+        open={isOpenimg.openingState}
+        plugins={[Fullscreen]}
+        index={isOpenimg.openingIndex}
+        close={() => setOpenimg({ openingState: false, openingIndex: 0 })}
+        styles={{ container: { backgroundColor: "rgba(0, 0, 0, .9)" } }}
+        slides={[
+          { src: base_url + thumb_image },
+          ...parsedGalleryImages.map(img => ({ src: base_url + img }))
+        ]}
+      />
 
-
+      {/* Modal Video */}
+      <React.Fragment>
+        <ModalVideo
+          channel="youtube"
+          isOpen={isOpenVideo}
+          videoId={videoId}
+          onClose={() => setOpenVideo(false)}
+        />
+      </React.Fragment>
     </>
   );
 };

@@ -15,17 +15,17 @@ const Banner = ({ banner }) => {
     const settings = useMemo(() => {
         return {
             slidesPerView: "auto",
-            speed: 1500,
+            speed: 3000,
             spaceBetween: 30,
             effect: "fade",
             loop: true,
             fadeEffect: {
                 crossFade: true, // Enable cross-fade transition
             },
-            // autoplay: {
-            // 	delay: 2000, // Autoplay duration in milliseconds
-            // 	disableOnInteraction: false,
-            // },
+            autoplay: {
+                delay: 2000, // Autoplay duration in milliseconds
+                disableOnInteraction: false,
+            },
             pagination: {
                 el: ".swiper-pagination",
                 clickable: true,
@@ -105,7 +105,8 @@ const Banner = ({ banner }) => {
                                 return (
 
                                     <SwiperSlide key={index} className="swiper-slide">
-                                        <div className="home1-banner-wrapper" style={{ backgroundImage: `url(${base_url + item.image})` }}>
+                                        <div className="home1-banner-wrapper" >
+                                            <img className="banner-bg" src={`${base_url + item.image}`} alt="" />
                                             <div className="container">
                                                 <div className="row">
                                                     <div className="col-lg-12">
@@ -125,6 +126,20 @@ const Banner = ({ banner }) => {
                     </div>
                 </Swiper>
                 <div className="swiper-pagination" />
+                <ul className="social-list">
+                    <li>
+                        <a href="https://www.facebook.com/"><i class="bx bxl-facebook"></i></a>
+                    </li>
+                    <li>
+                        <a href="https://twitter.com/"><i class="bi bi-twitter-x"></i></a>
+                    </li>
+                    <li>
+                        <a href="https://www.pinterest.com/"><i class="bx bxl-pinterest-alt"></i></a>
+                    </li>
+                    <li>
+                        <a href="https://www.instagram.com/"><i class="bx bxl-instagram"></i></a>
+                    </li>
+                </ul>
             </div>
             {/* <div className="home6-banner-section mb-120">
                 <div className="video-wrapper">

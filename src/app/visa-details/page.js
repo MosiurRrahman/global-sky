@@ -5,15 +5,24 @@ import { useSearchParams } from 'next/navigation'; // Updated import
 import { getVisaDetails } from '@/utils/getApi'; // Adjust the path to match your project structure
 import { base_url } from '@/utils/const';
 import Error from '@/components/Error';
+import VisaMultistepForm from '@/components/VisaMultistepForm';
+import ContentLoader from 'react-content-loader';
 
 const VisaDetailsComponent = () => {
   const searchParams = useSearchParams(); // Use search params for query parameters
   const country = searchParams.get('country'); // Extract country from search params
   const category = searchParams.get('category'); // Extract category from search params
   const [visaDetails, setVisaDetails] = useState(null);
+  const [selectedOfferId, setSelectedOfferId] = useState(null);
+
+  const handleApplyNowClick = (offerId) => {
+    setSelectedOfferId(offerId);
+  };
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [documents, setDocuments] = useState([]);
+
 
   useEffect(() => {
     // Add the class to the body element when the component is mounted
@@ -55,7 +64,22 @@ const VisaDetailsComponent = () => {
   }, [country, category]); // Re-run when country or category changes
 
   if (loading) {
-    return <div>Loading...</div>;
+    return  <ContentLoader 
+    speed={2}
+    width={1800}
+    height={600}
+    viewBox="0 0 400 160"
+    backgroundColor="#f3f3f3"
+    foregroundColor="#ecebeb"
+   
+  >
+    <rect x="48" y="8" rx="3" ry="3" width="88" height="6" /> 
+    <rect x="48" y="26" rx="3" ry="3" width="52" height="6" /> 
+    <rect x="0" y="56" rx="3" ry="3" width="410" height="6" /> 
+    <rect x="0" y="72" rx="3" ry="3" width="380" height="6" /> 
+    <rect x="0" y="88" rx="3" ry="3" width="178" height="6" /> 
+    <circle cx="20" cy="20" r="20" />
+  </ContentLoader>;
   }
 
   if (error) {
@@ -67,7 +91,7 @@ const VisaDetailsComponent = () => {
       {
         visaDetails?.status ? <>
           {/* Render the visa details */}
-          <div className="about-breadcrum-section mb-120">
+          <div className="about-breadcrum-section mb-120 mt-100">
             <div className="container">
               <div className="row">
                 <div className="col-lg-12">
@@ -84,217 +108,7 @@ const VisaDetailsComponent = () => {
           <div>
           </div>
 
-          <div className="modal fade visa-apply-modal" id="visa-apply-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex={-1} aria-labelledby="visa-apply-modalLabel" aria-hidden="true">
-            <div className="modal-dialog  modal-dialog-centered">
-              <div className="modal-content form-wapper">
-                <button type="button" className="modal-close" data-bs-dismiss="modal" aria-label="Close"><i className="bi bi-x-circle" /></button>
-                <div className="modal-header">
-                  <ul className="visa-form-step" id="progressbar">
-                    <li>Step 1: Travel Date</li>
-                    <li>Step 2: Visa Type</li>
-                    <li>Step 3: Personal Info</li>
-                  </ul>
-                </div>
-                <div className="modal-body">
-                  <form id="msform" className="visa-form">
-                    <fieldset className="postcode">
-                      <div className="row">
-                        <div className="col-lg-4 d-flex align-items-center">
-                          <div className="step-title">
-                            <h4>Travel Details</h4>
-                            <p>Provide your travel details.</p>
-                          </div>
-                        </div>
-                        <div className="col-lg-8">
-                          <div className="from-wrapper">
-                            <div className="row">
-                              <div className="col-md-12 mb-35">
-                                <div className="form-inner">
-                                  <label>Departure Date</label>
-                                  <input type="text" name="inOut" readOnly />
-                                </div>
-                              </div>
-                              <div className="col-md-12 mb-35">
-                                <div className="form-inner">
-                                  <label>Return Date</label>
-                                  <input type="text" name="inOut" readOnly />
-                                </div>
-                              </div>
-                            </div>
-                            <div className="next-prev-btn d-flex align-items-center justify-content-end flex-wrap gap-3">
-                              <button className="next primary-btn1">Next <i className="bi bi-arrow-right" />
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </fieldset>
-                    <fieldset className="postcode">
-                      <div className="row">
-                        <div className="col-lg-4 d-flex align-items-center">
-                          <div className="step-title">
-                            <h4>Visa Details</h4>
-                            <p>Provide your visa details.</p>
-                          </div>
-                        </div>
-                        <div className="col-lg-8">
-                          <div className="from-wrapper">
-                            <div className="row">
-                              <div className="col-md-12 mb-35">
-                                <div className="form-inner">
-                                  <label>Entry Type</label>
-                                  <select>
-                                    <option>Select Entry Type</option>
-                                    <option>Select Entry Type</option>
-                                    <option>Select Entry Type</option>
-                                    <option>Select Entry Type</option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div className="col-md-12 mb-35">
-                                <div className="form-inner">
-                                  <label>Type of Visa</label>
-                                  <select>
-                                    <option>Select visa Type</option>
-                                    <option>Select visa Type</option>
-                                    <option>Select visa Type</option>
-                                    <option>Select visa Type</option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div className="col-md-12 mb-35">
-                                <div className="form-inner">
-                                  <label>Country of Application</label>
-                                  <input type="text" placeholder="Russia" />
-                                </div>
-                              </div>
-                            </div>
-                            <div className="next-prev-btn d-flex align-items-center justify-content-end flex-wrap gap-4">
-                              <button className="prev primary-btn1"> <i className="bi bi-arrow-left" />
-                                Previous</button>
-                              <button className="next primary-btn1">Next <i className="bi bi-arrow-right" />
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </fieldset>
-                    <fieldset className="postcode">
-                      <div className="row">
-                        <div className="col-lg-4 d-flex align-items-center">
-                          <div className="step-title">
-                            <h4>Personal Information &amp; Requirement Upload</h4>
-                            <p>Provide your personal information and upload necessary documents.</p>
-                          </div>
-                        </div>
-                        <div className="col-lg-8">
-                          <div className="from-wrapper">
-                            <div className="row">
-                              <div className="col-md-6 mb-35">
-                                <div className="form-inner">
-                                  <label>Full name</label>
-                                  <input type="text" placeholder="Enter your full neme" />
-                                </div>
-                              </div>
-                              <div className="col-md-6 mb-35">
-                                <div className="form-inner">
-                                  <label>Date of Birth</label>
-                                  <input type="text" name="inOut" readOnly />
-                                </div>
-                              </div>
-                              <div className="col-md-12 mb-35">
-                                <div className="form-inner">
-                                  <label>Nationality</label>
-                                  <select>
-                                    <option>Select Nationality</option>
-                                    <option>Select Nationality</option>
-                                    <option>Select Nationality</option>
-                                    <option>Select Nationality</option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div className="col-md-4">
-                                <div className="image-drop-area mb-25">
-                                  <div className="dropzone dropzone-1 text-center dz-clickable">
-                                    <div className="icon">
-                                      <img src="assets/image/icon/file.svg" alt="" />
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="col-md-4">
-                                <div className="image-drop-area mb-25">
-                                  <div className="dropzone dropzone-2 text-center dz-clickable">
-                                    <div className="icon">
-                                      <img src="assets/image/icon/file.svg" alt="" />
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="col-md-8 mb-35">
-                                <div className="form-inner">
-                                  <label>Notes</label>
-                                  <textarea defaultValue={""} />
-                                </div>
-                              </div>
-                              <div className="col-md-6 mb-35">
-                                <div className="form-inner">
-                                  <label>Mobile Number</label>
-                                  <input type="text" />
-                                </div>
-                              </div>
-                              <div className="col-md-6 mb-35">
-                                <div className="form-inner">
-                                  <label>WhatsApp Number</label>
-                                  <input type="text" />
-                                </div>
-                              </div>
-                              <div className="col-md-12 mb-20">
-                                <div className="form-inner">
-                                  <label>Email Address</label>
-                                  <input type="email" />
-                                </div>
-                              </div>
-                              <div className="col-lg-12 mb-50">
-                                <div className="form-check">
-                                  <input className="form-check-input" type="checkbox" defaultValue id="contactCheck" />
-                                  <label className="form-check-label" htmlFor="contactCheck">
-                                    I have read &amp; accepted Terms &amp; Conditions.
-                                  </label>
-                                </div>
-                              </div>
-                              <div className="col-lg-12 mb-35">
-                                <div className="form-inner">
-                                  <h6>DISCLAIMER</h6>
-                                  <p>This is to confirm that Global Sky Visa Services EST. will not in
-                                    any manner be liable or responsible for any delay in the
-                                    processing or rejection of any Visa applications, once the
-                                    documents have been delivered to the respectful Consulate
-                                    General. Upon receiving your documents make every effort to
-                                    ensure that the Visa(s) you have requested are correct: Any
-                                    Visa(s) you have requested have been obtained The dates of the
-                                    Visa(s) cover your period of intended stay for each country with
-                                    the appropriate number of entries you have requested. Your
-                                    Passport is valid for the appropriate time you will be abroad.
-                                    By entering your email address, you agree to receive emails
-                                    (including the picture newsletter, as well as promotional offers
-                                    and announcements.)</p>
-                                </div>
-                              </div>
-                              <div className="next-prev-btn d-flex align-items-center justify-content-end flex-wrap gap-4">
-                                <button className="prev primary-btn1"> <i className="bi bi-arrow-left" />
-                                  Previous</button>
-                                <button className=" primary-btn1" type="submit">Submit</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div></fieldset>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
+          <VisaMultistepForm  selectedOfferId={selectedOfferId} data={visaDetails}/>
 
           <div style={{ display: 'none' }} className="my-template">
             <div id="mytmp" className="dz-preview dz-file-preview">
@@ -329,25 +143,7 @@ const VisaDetailsComponent = () => {
               </div>
             </div>
           </div>
-          {/* <div className="visa-apply-section mb-50">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-lg-12">
-                                    <div className="apply-wrap">
-                                        <div className="destination-country-name">
-                                            <h4>{visaDetails.data.visaDetails.get_country.name}</h4>
-                                        </div>
-                                        <div className="visa-type-and-aply-form text-center">
-                                            <h5>{visaDetails.data.visaDetails.title}</h5>
-                                            <p dangerouslySetInnerHTML={{ __html: visaDetails.data.visaDetails.details }}></p>
-                                            <button className="primary-btn1" data-bs-toggle="modal" data-bs-target="#visa-apply-modal">Apply
-                                                Now</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
+     
           <div className="visa-details-section mb-90">
             <div className="container">
               <div className="row">
@@ -514,7 +310,7 @@ const VisaDetailsComponent = () => {
                             <h6>{visaDetails.data.currency} {offer.price} / <span>Person</span></h6>
                             <span><img src="/assets/image/alart.svg" alt="" /> Visa issuance rights reserved by the embassy</span>
                           </div>
-                          <button data-bs-toggle="modal" data-bs-target="#visa-apply-modal">SELECT OFFER</button>
+                          <button data-bs-toggle="modal" onClick={() => handleApplyNowClick(offer.id)} data-bs-target="#visa-apply-modal">Apply Now</button>
                         </div>
                       })
                     }
@@ -530,7 +326,7 @@ const VisaDetailsComponent = () => {
                       </div>
                       <div className="content">
                         <span>WhatsApp Message</span>
-                        <h6><a href="https://api.whatsapp.com/send?phone=+971-552 237 719">+971-552 237 719</a></h6>
+                        <h6><a href={`https://api.whatsapp.com/send/?phone=${visaDetails.data.whatsapp_number}&text=Hello! Can I get more info about **`}>+971552237719</a></h6>
                       </div>
                     </div>
                   </div>
@@ -550,7 +346,7 @@ const VisaDetailsComponent = () => {
 
 const VisaDetails = () => {
   return (
-    <Suspense fallback={<div>Loading Visa Details...</div>}>
+    <Suspense fallback={<>dadad</>}>
       <VisaDetailsComponent />
     </Suspense>
   );

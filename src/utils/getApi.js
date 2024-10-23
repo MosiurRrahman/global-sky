@@ -1,17 +1,10 @@
 import { base_url } from "@/utils/const";
 
-// Function to fetch data with retry logic
-const fetchWithRetry = async (url, options = {}, retries = 3, delay = 1000) => {
+// Function to fetch data without caching
+const fetchNoCache = async (url, options = {}) => {
     try {
-        const response = await fetch(url, options);
-
-        // If the response status is 429, retry after a delay
-        if (response.status === 429 && retries > 0) {
-            console.warn(`Rate limit hit. Retrying in ${delay}ms...`);
-            await new Promise(resolve => setTimeout(resolve, delay));
-            return fetchWithRetry(url, options, retries - 1, delay * 2); // Exponential backoff
-        }
-
+        const response = await fetch(url, { ...options, cache: "no-store" });
+        
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -24,143 +17,83 @@ const fetchWithRetry = async (url, options = {}, retries = 3, delay = 1000) => {
         }
     } catch (error) {
         console.error(`Fetch failed: ${error.message}`);
-        throw error; // Rethrow error to handle it further up the call chain if needed
+        throw error;
     }
 };
 
-// Function to fetch footer data
+// Example usage to fetch API data without caching
 export const getFooter = async () => {
-    return await fetchWithRetry(base_url + 'api/footer');
+    return await fetchNoCache(base_url + 'api/footer');
 };
-// Function to fetch about data
+
 export const getAbout = async () => {
-    return await fetchWithRetry(base_url + 'api/page/about');
+    return await fetchNoCache(base_url + 'api/page/about');
 };
+
 export const getContact = async () => {
-    return await fetchWithRetry(base_url + 'api/page/contact');
+    return await fetchNoCache(base_url + 'api/page/contact');
 };
+
 export const getFaq = async () => {
-    return await fetchWithRetry(base_url + 'api/page/faq');
+    return await fetchNoCache(base_url + 'api/page/faq');
 };
 
-// Function to fetch header data
 export const getHeader = async () => {
-    return await fetchWithRetry(base_url + 'api/header');
+    return await fetchNoCache(base_url + 'api/header');
 };
 
-// Function to fetch country specialists
 export const getCountrySpecialists = async () => {
-    return await fetchWithRetry(base_url + 'api/page/home/country-specialists');
+    return await fetchNoCache(base_url + 'api/page/home/country-specialists');
 };
 
-// Function to fetch slider data
 export const getSliderData = async () => {
-    return await fetchWithRetry(base_url + 'api/page/home/slider');
+    return await fetchNoCache(base_url + 'api/page/home/slider');
 };
 
-// Function to fetch offer slider data
 export const getofferSliderData = async () => {
-    return await fetchWithRetry(base_url + 'api/page/home/offers');
+    return await fetchNoCache(base_url + 'api/page/home/offers');
 };
 
-// Function to fetch visa categories
 export const getVisaCategory = async () => {
-    return await fetchWithRetry(base_url + 'api/page/home/visa-category');
+    return await fetchNoCache(base_url + 'api/page/home/visa-category');
 };
 
-// Function to fetch "Why Choose Us" data
 export const getWhyChooseUs = async () => {
-    return await fetchWithRetry(base_url + 'api/page/home/why-choose-us');
+    return await fetchNoCache(base_url + 'api/page/home/why-choose-us');
 };
-// Function to fetch "Why Choose Us" data
+
 export const getSearchData = async () => {
-    return await fetchWithRetry(base_url + 'api/page/home/search-bar');
+    return await fetchNoCache(base_url + 'api/page/home/search-bar');
 };
-// Function to fetch "Why Choose Us" data
+
 export const getBannerData = async () => {
-    return await fetchWithRetry(base_url + 'api/page/home/top-slider');
+    return await fetchNoCache(base_url + 'api/page/home/top-slider');
+};
+export const getAllGlobalVisa = async () => {
+    return await fetchNoCache(base_url + 'api/get/visas');
 };
 
-// Function to fetch attractions data
-export const getattructions = async () => {
-    return await fetchWithRetry(base_url + 'api/attractions');
+export const getAttractions = async () => {
+    return await fetchNoCache(base_url + 'api/attractions');
 };
-// Function to fetch attractions data
+
 export const getReviews = async () => {
-    return await fetchWithRetry(base_url + 'api/page/home/reviews');
+    return await fetchNoCache(base_url + 'api/page/home/reviews');
 };
 
-// Function to fetch attraction details using slug
-export const getattructionsDetails = async (slug) => {
-    try {
-        const response = await fetch(`${base_url}api/attraction/${encodeURIComponent(slug)}` );
-        if (!response.ok) {
-            throw new Error('Failed to fetch attraction details');
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching attraction details:', error);
-        return null;
-    }
+export const getAttractionDetails = async (slug) => {
+    return await fetchNoCache(`${base_url}api/attraction/${encodeURIComponent(slug)}`);
 };
-// Function to fetch attraction details using slug
+
 export const getPromotions = async (slug) => {
-    try {
-        const response = await fetch(`${base_url}api/promotions/${encodeURIComponent(slug)}` , {cache:"no-store"});
-        if (!response.ok) {
-            throw new Error('Failed to fetch attraction details');
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching attraction details:', error);
-        return null;
-    }
+    return await fetchNoCache(`${base_url}api/promotions/${encodeURIComponent(slug)}`);
 };
+
 export const getSlug = async (slug) => {
-    try {
-        const response = await fetch(`${base_url}api/page/${slug}`);
-        if (!response.ok) {
-            throw new Error('Failed to fetch attraction details');
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching attraction details:', error);
-        return null;
-    }
+    return await fetchNoCache(`${base_url}api/page/${slug}`);
 };
 
-// Function to fetch visa details using country and category
+
 export const getVisaDetails = async (country, category) => {
-    try {
-        const response = await fetch(`${base_url}api/visa-details?country=${encodeURIComponent(country)}&category=${encodeURIComponent(category)}` , {cache:"no-store"});
-        if (!response.ok) {
-            throw new Error('Failed to fetch visa details');
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching visa details:', error);
-        return null; // Return null in case of an error
-    }
+    return await fetchNoCache(`${base_url}api/visa-details?country=${encodeURIComponent(country)}&category=${encodeURIComponent(category)}`);
 };
-
-// // Function to fetch visa details using country and category
-// export const getCountryVisaCategory = async (category) => {
-//     try {
-//         const response = await fetch(`${base_url}api/get/category/${encodeURIComponent(category)}`, {cache:"no-store"});
-//         if (!response.ok) {
-//             throw new Error('Failed to fetch visa details');
-//         }
-//         const data = await response.json();
-//         return data;
-//     } catch (error) {
-//         console.error('Error fetching visa details:', error);
-//         return null; // Return null in case of an error
-//     }
-// };
-
-
-

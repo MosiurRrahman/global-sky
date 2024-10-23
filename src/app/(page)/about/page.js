@@ -4,6 +4,10 @@ import { base_url } from '@/utils/const'
 import { getAbout } from '@/utils/getApi'
 import React from 'react'
 
+
+
+
+
 export default async function AboutPage() {
   const aboutData = await getAbout()
 
@@ -12,28 +16,12 @@ export default async function AboutPage() {
     <>
       {
         aboutData.status ? (<>
-           <div className="about-breadcrum-section mb-120">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-12">
-              <div className={`banner-content ${aboutData.data.image === undefined?"not-image":""}`} style={{
-                backgroundImage: `linear-gradient(270deg, rgba(0, 0, 0, 50%), rgba(0, 0, 0, 0.3) 50%), url(${aboutData.data.image === null||aboutData.data.image === undefined?  '': base_url+aboutData.image })`
-              }} >
-                <span>{aboutData.data.title}</span>
-                <h1>About Us</h1>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
           {
             aboutData.data.get_sections.map((section) => {
-              
-
               return <div key={section.id}>
                 {
                   section.section_type === "section" ?
-                    <div className="about-us-section mb-70">
+                    <div className="about-us-section mt-50 mb-70">
                       <div className="container">
                         <div className="row gy-4">
                           <div className="col-lg-6 d-flex align-items-center">
@@ -90,8 +78,8 @@ export default async function AboutPage() {
                               {aboutData.office_address.map((address, index) => {
                                 return <div key={index} className="col-lg-4 col-md-6">
                                   <div className="office-location-card">
-                                    <h4>{address.office_name}</h4>
-                                    <a href="#">{address.address}</a>
+                                    <h4 dangerouslySetInnerHTML={{__html:address.office_name}}></h4>
+                                    <div className='contact-info' dangerouslySetInnerHTML={{__html:address.address}}></div>
                                   </div>
                                 </div>
                               })}
@@ -143,11 +131,7 @@ export default async function AboutPage() {
               </div>
             })
           }
-
-
-
-
-        </>) : (<FileNotFound />)
+        </>) : (<h3>Data not found</h3>)
       }
 
 

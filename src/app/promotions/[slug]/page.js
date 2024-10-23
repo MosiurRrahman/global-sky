@@ -23,7 +23,6 @@ const PromotionsPage = ({ params }) => {
       });
     }
   }, [slug]);
- console.log(pageData);
  
 
   return (

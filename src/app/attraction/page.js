@@ -1,16 +1,16 @@
 import Breadcrumb from '@/components/layout/Breadcrumb'
 import { base_url } from '@/utils/const';
-import { getattructions } from '@/utils/getApi';
+import { getAttractions } from '@/utils/getApi';
 import Link from 'next/link'
 import React from 'react'
 
 export default async function Attractionpage() {
-    const attractions = await getattructions();
+    const attractions = await getAttractions();
 
     return (
         <>
             {/* <Breadcrumb /> */}
-            <div className="attraction-section mt-120 mb-120">
+            <div className="attraction-section mt-100 mb-120">
                 <div className="container">
                     <div className="row g-4">
                         {
@@ -28,14 +28,14 @@ export default async function Attractionpage() {
                                     <div key={item.id} className="col-lg-4 col-md-6">
                                         <div className="attraction-card">
                                             <Link href={`/attraction/${item.slug}`} className="attraction-card-img">
-                                                <img src={base_url + item.thumb_image} alt={item.title} />
+                                                <img style={{width:'415px', height:"360px"}} src={base_url + item.thumb_image} alt={item.title} />
                                                 {/* <div className="batch">
                                                     <span>Popular</span>
                                                 </div> */}
                                             </Link>
                                             <div className="attraction-card-content">
                                                 <div className="card-content-top">
-                                                    <div className="rating-area">
+                                                    {/* <div className="rating-area">
                                                         <ul className="rating">
                                                             {[...Array(5)].map((_, i) => (
                                                                 <li key={i}>
@@ -44,7 +44,7 @@ export default async function Attractionpage() {
                                                             ))}
                                                         </ul>
                                                         <span>({totalReviews} {totalReviews === 1 ? 'Review' : 'Reviews'})</span>
-                                                    </div>
+                                                    </div> */}
                                                     <h5><Link href={`/attraction/${item.slug}`}>{item.title}</Link></h5>
                                                     <ul className="feature-list">
                                                         <li>
@@ -59,10 +59,10 @@ export default async function Attractionpage() {
                                                 <div className="card-content-bottom">
                                                     <div className="price-area">
                                                         <span className="title">Starting From:</span>
-                                                        <h6><sub>$</sub>{item.regular_price} <del>${(parseFloat(item.regular_price) + item.discount).toFixed(2)}</del></h6>
+                                                        <h6><sub>{attractions.currency}&nbsp;</sub>{item.regular_price} <del>${(parseFloat(item.regular_price) + item.discount).toFixed(2)}</del></h6>
                                                         <span>Per Person</span>
                                                     </div>
-                                                    <a href="#" className="primary-btn1">Book Now</a>
+                                                    <Link href={`/attraction/${item.slug}`} className="primary-btn1">Book Now</Link>
                                                 </div>
                                             </div>
                                         </div>

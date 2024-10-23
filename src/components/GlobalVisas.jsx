@@ -4,7 +4,7 @@ import { base_url } from "@/utils/const";
 import Link from "next/link";
 import { slugify } from "@/utils/slugify";
 
-const CountryVisa = ({ data }) => {
+const GlobalVisas = ({ data }) => {
     const [visibleItems, setVisibleItems] = useState(8); // Initial number of items to show
     const [allLoaded, setAllLoaded] = useState(false); // Track if all items are loaded
 
@@ -13,7 +13,7 @@ const CountryVisa = ({ data }) => {
         const newVisibleItems = visibleItems + 4; // Adjust the number of items loaded
 
         // Check if the new number of visible items exceeds the data length
-        if (newVisibleItems >= data.countries.length) {
+        if (newVisibleItems >= data.length) {
             setAllLoaded(true); // Set to true if all data has been loaded
         }
 
@@ -22,20 +22,19 @@ const CountryVisa = ({ data }) => {
 
     return (
         <>
-            <div className="country-section mb-70">
+            <div className="country-section mt-100 mb-70">
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-12 mb-60">
                             <div className="section-title text-center">
-                                <h2>{data.section.title}</h2>
-                                <p>{data.section.sub_title}</p>
+                                <h2>Global Visa
+                                </h2>
+                                <p> We understand your needs and deliver digital marketing through unique selling offer that our country specialists oneto proposition.</p>
                             </div>
                         </div>
                     </div>
                     <div className="row gy-4">
-                        {data?.countries?.slice(0, visibleItems).map((item, index) => {
-
-
+                        {data?.slice(0, visibleItems).map((item, index) => {
                             return (
                                 <div key={index} className="col-xl-3 col-lg-4 col-md-6 col-sm-6">
                                     <>
@@ -51,16 +50,17 @@ const CountryVisa = ({ data }) => {
                                                     </div>
                                                 </div>
                                                 <div className="country-card-content">
-                                                    <h4>{item?.name}</h4>
-                                                    <p>{item?.notes}</p>
-                                                    <div className="card-footer-btn" style={{ textAlign: "center", }}>
-                                                        <Link href={`/visa-details?country=${item?.name}&category=${item.notes}`} className="primary-btn1"> Apply Now</Link>
+                                                    <h4>{item?.country_name}</h4>
+                                                    <p>{item?.category_name}</p>
+                                                    <div className="card-footer-btn text-center" >
+                                                        <Link href={`/visa-details?country=${item?.country_name}&category=${item.category_name}`} className="primary-btn1"> Apply Now</Link>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </>
 
+                                        </div>
+
+                                    </>
                                 </div>
                             )
                         })}
@@ -80,4 +80,4 @@ const CountryVisa = ({ data }) => {
     );
 };
 
-export default CountryVisa;
+export default GlobalVisas;
