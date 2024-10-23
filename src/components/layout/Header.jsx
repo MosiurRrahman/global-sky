@@ -36,6 +36,11 @@ function reducer(state, action) {
         ...state,
         isSidebarOpen: !state.isSidebarOpen,
       };
+    case "CLOSE_SIDEBAR":
+      return {
+        ...state,
+        isSidebarOpen: !state.isSidebarOpen,
+      };
     case "setScrollY":
       return { ...state, scrollY: action.payload };
     case "TOGGLE_LEFT_SIDEBAR":
@@ -104,11 +109,16 @@ const Header = () => {
     dispatch({ type: "TOGGLE_MENU", menu: "" });
     dispatch({ type: "TOGGLE_SUB_MENU", subMenu: "" });
     dispatch({ type: "TOGGLE_SIDEBAR" });
+    // dispatch({ type: "CLOSE_SIDEBAR" });
   };
 
   // Move usePathname to the top of the component
   const pathName = usePathname();
-
+  useEffect(() => {
+    if (state.isSidebarOpen) {
+      dispatch({ type: "CLOSE_SIDEBAR" }); // Close the sidebar when pathname changes
+    }
+  }, [pathName]);
   useEffect(() => {
     const fetchheaderData = async () => {
       try {
@@ -127,7 +137,7 @@ const Header = () => {
   if (error) {
     return <div>Error loading header: {error}</div>;
   }
-
+ 
   return (
     <header className={`header-area ${state.scrollY > 10 ? "sticky" : ""} ${pathName === "/" ? "header1" : "header1 about-us"}`}>
       <div className="header-logo">

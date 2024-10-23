@@ -6921,6 +6921,9 @@ header.header1.about-us .nav-right .mobile-menu-btn {
   padding: 10px 25px;
   height: 48px;
 }
+.package-details-area .form-inner .nice-select .current {
+  color: var(--title-color);
+}
 .package-details-area .form-inner .nice-select::after {
   border-bottom: 1px solid #999;
   border-right: 1px solid #999;

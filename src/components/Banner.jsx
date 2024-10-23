@@ -106,7 +106,7 @@ const Banner = ({ banner }) => {
 
                                     <SwiperSlide key={index} className="swiper-slide">
                                         <div className="home1-banner-wrapper" >
-                                            <img className="banner-bg" src={`${base_url + item.image}`} alt="" />
+                                            <img className="banner-bg" src={`${base_url + item.image}`} alt={item.image} />
                                             <div className="container">
                                                 <div className="row">
                                                     <div className="col-lg-12">

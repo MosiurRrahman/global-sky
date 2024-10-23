@@ -1,8 +1,8 @@
-"use client";
-import useCustomSelect from "@/customHooks/useCustomSelect";
 import React, { useEffect, useRef } from "react";
+import useCustomSelect from "@/customHooks/useCustomSelect";
 
-const SelectComponent = ({ options, placeholder, open, customClass, onSelect }) => {
+const SelectComponent = ({ options, placeholder, open, customClass, onSelect, defaultValue }) => {
+  // Initialize the custom select hook
   const {
     isOpen,
     selectedOption,
@@ -10,7 +10,7 @@ const SelectComponent = ({ options, placeholder, open, customClass, onSelect }) 
     closeDropdown,
     toggleDropdown,
     selectOption,
-  } = useCustomSelect(options, open);
+  } = useCustomSelect(options, open, defaultValue); // Pass defaultValue to the hook
 
   const dropdownRef = useRef(null);
 
@@ -31,10 +31,8 @@ const SelectComponent = ({ options, placeholder, open, customClass, onSelect }) 
 
   const handleOptionSelect = (option) => {
     selectOption(option);
-    closeDropdown(); // Close the dropdown after selection
-
     if (onSelect) {
-      onSelect(option); // Trigger onSelect when an option is selected
+      onSelect(option);
     }
   };
 
@@ -42,7 +40,7 @@ const SelectComponent = ({ options, placeholder, open, customClass, onSelect }) 
 
   return (
     <div className={dropdownClassName} tabIndex="0" onClick={toggleDropdown} ref={dropdownRef}>
-      <span className="current">{selectedOption || placeholder}</span>
+      <span className="current">{selectedOption || placeholder}</span> {/* Show placeholder if no selectedOption */}
       <ul className="list">
         {options.map((option, index) => (
           <li

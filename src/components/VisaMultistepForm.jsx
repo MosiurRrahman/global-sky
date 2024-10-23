@@ -30,8 +30,31 @@ const VisaMultistepForm = ({ data, selectedOfferId }) => {
         nid_image: '',
         nid_image_back: '',
     });
+    // Define required fields
+    const requiredFields = [
+        'name',
+        'mobile',
+        'email',
+        'visa_type',
+        'entry_type',
+        'departure_date',
+        'return_date',
+        'birthday',
+        'whatsapp_number',
+        'nationality',
+        'notes',
+        'photo',
+        'passport',
+        'nid_image',
+        'nid_image_back',
+        // Add other required fields as needed
 
-    // Update formData when selectedOfferId changes
+        // Add other required fields as needed
+    ];
+    const validateForm = () => {
+        const missingFields = requiredFields.filter(field => !formData[field]);
+        return missingFields;
+    };
     useEffect(() => {
         if (selectedOfferId !== null) {
             setFormData((prevData) => ({
@@ -42,17 +65,16 @@ const VisaMultistepForm = ({ data, selectedOfferId }) => {
     }, [selectedOfferId]);
 
     const totalSteps = 3; // Total number of steps
-
-    // Step validation conditions
     const isNextStepOneEnabled = formData.departure_date && formData.return_date;
     const isNextStepTwoEnabled = formData.entry_type && formData.visa_type && formData.destination_country;
 
-    // Step navigation functions
     const nextStep = () => {
         if (currentStep === 0 && isNextStepOneEnabled) {
             setCurrentStep(1); // Move to Step 2
         } else if (currentStep === 1 && isNextStepTwoEnabled) {
             setCurrentStep(2); // Move to Step 3
+        } else if (currentStep < totalSteps - 1) {
+            setCurrentStep(currentStep + 1); // Default next step increment
         }
     };
 
@@ -62,7 +84,6 @@ const VisaMultistepForm = ({ data, selectedOfferId }) => {
         }
     };
 
-    // Handle file uploads
     const handleImageUpload = (fieldName, file) => {
         setFormData((prevState) => ({
             ...prevState,
@@ -77,75 +98,135 @@ const VisaMultistepForm = ({ data, selectedOfferId }) => {
         }));
     };
 
-    // Handle form inputs
     const handleChange = (e) => {
-        let inputValue = null;
-        if (['passport', 'passport_back', 'photo', 'nid_image', 'nid_image_back'].includes(e.target.name)) {
-            inputValue = e.target.files[0];
-        } else {
-            inputValue = e.target.value;
-        }
+        const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
-            [e.target.name]: inputValue,
+            [name]: value,
         }));
     };
 
-     // Handle dropdown selection
-     const handleVisaTypeSelect = (selectedVisaType) => {
-        if (!formData.visa_type) { // Check if visa_type is not already set
-            setFormData((prevData) => ({
-                ...prevData,
-                visa_type: selectedVisaType,
-            }));
-        }
+    const handleVisaTypeSelect = (selectedVisaType) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            visa_type: selectedVisaType,
+        }));
     };
 
     const handleEntryTypeSelect = (selectedEntryType) => {
-        if (!formData.entry_type) { // Check if entry_type is not already set
-            setFormData((prevData) => ({
-                ...prevData,
-                entry_type: selectedEntryType,
-            }));
-        }
-    };
-    const handleNationalitySelect = (nationality) => {
-        if (!formData.nationality) { // Check if nationality is not already set
-            setFormData((prevData) => ({
-                ...prevData,
-                nationality, // Update nationality in formData
-            }));
-        }
+        setFormData((prevData) => ({
+            ...prevData,
+            entry_type: selectedEntryType,
+        }));
     };
 
-    // Handle form submission
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const formPayload = new FormData();
-        Object.keys(formData).forEach((key) => {
-            formPayload.append(key, formData[key]);
+    const handleNationalitySelect = (nationality) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            nationality: nationality,
+        }));
+    };
+
+   // Handle form submission
+const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validate form
+    const missingFields = validateForm();
+    if (missingFields.length > 0) {
+        alert(`Missing fields: ${missingFields.join(', ')}`);
+        return; // Stop submission if there are missing fields
+    }
+
+    // Create a new FormData object
+    const formPayload = new FormData();
+    // Append all the form fields to the FormData object
+    Object.keys(formData).forEach((key) => {
+        formPayload.append(key, formData[key]);
+    });
+
+    try {
+        // Make the API request
+        const response = await axios.post(`${base_url}api/visa/booking`, formPayload, {
+            headers: {
+                'Content-Type': 'multipart/form-data', // Ensure multipart/form-data
+            },
         });
 
-        try {
-            const response = await axios.post(`${base_url}api/visa/booking`, formPayload, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+        // Show success message
+        alert(response.data.message);
 
-            alert(response.data.message);
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
+        // Wait for 2-3 seconds before reloading the page
+        setTimeout(() => {
+            window.location.reload(); // Reload the current page
+        }, 2000); // Adjust the timeout as needed (2000 ms = 2 seconds)
 
-        } catch (error) {
-            console.error(error);
-            alert('An error occurred while submitting the form. Please try again.');
+    } catch (error) {
+        console.error(error);
+        alert('An error occurred while submitting the form. Please try again.'); // Handle error appropriately
+    }
+};
+
+    const renderButtons = () => {
+        if (currentStep === 0) {
+            return (
+                <div className="next-prev-btn d-flex align-items-center justify-content-end flex-wrap gap-3">
+                    <button
+                        type="button"
+                        className={`next primary-btn1 ${isNextStepOneEnabled ? '' : 'd-none'}`}
+                        onClick={nextStep}
+                    >
+                        Next <i className="bi bi-arrow-right" />
+                    </button>
+                </div>
+            );
+        } else if (currentStep === 1) {
+            return (
+                <div className="next-prev-btn d-flex align-items-center justify-content-end flex-wrap gap-3">
+                    <button
+                        type="button"
+                        className={`prev primary-btn1`}
+                        onClick={prevStep}
+                    >
+                        <i className="bi bi-arrow-left" /> Previous
+                    </button>
+                    <button
+                        type="button"
+                        className={`next primary-btn1 ${isNextStepTwoEnabled ? '' : 'd-none'}`}
+                        onClick={nextStep}
+                    >
+                        Next <i className="bi bi-arrow-right" />
+                    </button>
+                </div>
+            );
+        } else if (currentStep === 2) {
+            return (
+                <div className="next-prev-btn d-flex align-items-center justify-content-end flex-wrap gap-3">
+                    <button
+                        type="button"
+                        className="prev primary-btn1"
+                        onClick={prevStep}
+                    >
+                        <i className="bi bi-arrow-left" /> Previous
+                    </button>
+                    <button
+                        className={`primary-btn1 ${isFormDataComplete() ? '' : 'd-none'}`}
+                        type="submit"
+                    >
+                        Submit
+                    </button>
+                </div>
+            );
         }
     };
 
-    const isStepProcessing = (index) => index === currentStep;
-    const isStepActive = (index) => index < currentStep;
+    const isFormDataComplete = () => {
+        const { name, mobile, email, nationality } = formData;
+        return name && mobile && email && nationality; // Adjust this based on your required fields
+    };
+
+    const isStepProcessing = (index) => index === currentStep; // Current step
+    const isStepActive = (index) => index < currentStep; // All previous steps
 
     return (
         <div
@@ -208,16 +289,7 @@ const VisaMultistepForm = ({ data, selectedOfferId }) => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="next-prev-btn d-flex align-items-center justify-content-end flex-wrap gap-3">
-                                                    <button
-                                                        type="button"
-                                                        className={`next primary-btn1 ${!isNextStepOneEnabled ? "d-none" : ""}`}
-                                                        onClick={nextStep}
-                                                        disabled={currentStep === 0 && !isNextStepOneEnabled}
-                                                    >
-                                                        Next <i className="bi bi-arrow-right" />
-                                                    </button>
-                                                </div>
+                                                {renderButtons()}
                                             </div>
                                         </div>
                                     </div>
@@ -240,42 +312,23 @@ const VisaMultistepForm = ({ data, selectedOfferId }) => {
                                                     <div className="col-md-12 mb-35">
                                                         <div className="form-inner">
                                                             <label>Entry Type</label>
-                                                            {/* <SelectComponent   options={data.data.visa_types.map((e) => e.name)} placeholder={"select"}/> */}
-                                                            <SelectComponent onSelect={handleEntryTypeSelect} options={["Single", "Double", "Triple", "Multiple"]} placeholder={"Select Entry Type"} />
+                                                            <SelectComponent defaultValue={"Single"} onSelect={handleEntryTypeSelect} options={["Single", "Double", "Triple", "Multiple"]} placeholder={"Select Entry Type"} />
                                                         </div>
                                                     </div>
                                                     <div className="col-md-12 mb-35">
                                                         <div className="form-inner">
                                                             <label>Type of Visa</label>
-                                                            <SelectComponent onSelect={handleVisaTypeSelect} options={data.data.visa_types.map((e) => e.name)} placeholder={"Select Type of Visa"} />
+                                                            <SelectComponent defaultValue={data.data.visa_types.slice(0, 1).map((e) => e.name)} onSelect={handleVisaTypeSelect} options={data.data.visa_types.map((e) => e.name)} placeholder={"Select Type of Visa"} />
                                                         </div>
                                                     </div>
                                                     <div className="col-md-12 mb-35">
                                                         <div className="form-inner">
                                                             <label>Country of Application</label>
-                                                            {/* data.data.visaDetails.get_country.name */}
                                                             <input readOnly value={formData.destination_country} onChange={handleChange} type="text" name='destination_country' placeholder="Country" />
-                                                            {/* <SelectComponent onSelect={handleCountryTypeSelect} options={data.data.countries.map((e) => e.name)} placeholder={"select"} /> */}
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="next-prev-btn d-flex align-items-center justify-content-end flex-wrap gap-4">
-                                                    <button
-                                                        type="button"
-                                                        className="prev primary-btn1"
-                                                        onClick={prevStep}
-                                                    >
-                                                        <i className="bi bi-arrow-left" /> Previous
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className={`next primary-btn1 ${!isNextStepTwoEnabled ? "d-none" : ""}`}
-                                                        onClick={nextStep}
-                                                        disabled={currentStep === 1 && !isNextStepTwoEnabled}
-                                                    >
-                                                        Next <i className="bi bi-arrow-right" />
-                                                    </button>
-                                                </div>
+                                                {renderButtons()}
                                             </div>
                                         </div>
                                     </div>
@@ -391,7 +444,7 @@ const VisaMultistepForm = ({ data, selectedOfferId }) => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div className="col-md-8 mb-35">
                                                         <div className="form-inner">
                                                             <label>Notes</label>
@@ -419,7 +472,7 @@ const VisaMultistepForm = ({ data, selectedOfferId }) => {
                                                     <div className="col-lg-12 mb-50">
                                                         <div className="form-check">
                                                             <input required className="form-check-input" type="checkbox" defaultValue id="contactCheck" />
-                                                            <label  className="form-check-label" htmlFor="contactCheck">
+                                                            <label className="form-check-label" htmlFor="contactCheck">
                                                                 I have read &amp; accepted Terms &amp; Conditions.
                                                             </label>
                                                         </div>
@@ -442,17 +495,14 @@ const VisaMultistepForm = ({ data, selectedOfferId }) => {
                                                                 and announcements.)</p>
                                                         </div>
                                                     </div>
-                                                    <div className="next-prev-btn d-flex align-items-center justify-content-end flex-wrap gap-4">
-                                                        <button onClick={prevStep} className="prev primary-btn1"> <i className="bi bi-arrow-left" />
-                                                            Previous</button>
-                                                        <button className=" primary-btn1" type="submit">Submit</button>
-                                                    </div>
+                                                    {renderButtons()}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </fieldset>
                             )}
+
                         </form>
                     </div>
                 </div>

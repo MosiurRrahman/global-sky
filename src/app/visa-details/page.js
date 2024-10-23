@@ -308,7 +308,7 @@ const VisaDetailsComponent = () => {
                               </li>
                             </ul>
                             <h6>{visaDetails.data.currency} {offer.price} / <span>Person</span></h6>
-                            <span><img src="/assets/image/alart.svg" alt="" /> Visa issuance rights reserved by the embassy</span>
+                            <span><img src="/assets/image/alart.svg" alt="alart.svg" /> Visa issuance rights reserved by the embassy</span>
                           </div>
                           <button data-bs-toggle="modal" onClick={() => handleApplyNowClick(offer.id)} data-bs-target="#visa-apply-modal">Apply Now</button>
                         </div>

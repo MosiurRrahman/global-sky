@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-const useCustomSelect = (initialOptions, isOpenByDefault = false) => {
+const useCustomSelect = (initialOptions, isOpenByDefault = false, defaultValue = null) => {
   const [isOpen, setIsOpen] = useState(isOpenByDefault);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(defaultValue); // Set initial selected option from defaultValue
   const options = initialOptions;
 
   const openDropdown = () => {

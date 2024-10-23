@@ -43,7 +43,7 @@ const GlobalVisas = ({ data }) => {
                                                 <div className="country-image">
                                                     <Link href="/">
                                                         <img
-                                                            src={base_url + item.image} alt="imagessssss" />
+                                                            src={base_url + item.image} alt="image" />
                                                     </Link>
                                                     <div className="flag-icon">
                                                         <img src={base_url + item.flag} alt="image" />
